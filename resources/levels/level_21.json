@@ -1,0 +1,22 @@
+{
+  "level": 21,
+  "code": "728724",
+  "start": [1, 3],
+  "grid": [
+    "        bb     ",
+    "       bbb     ",
+    "bb  bbbbbb     ",
+    "bbbbbb  b      ",
+    "bbbb    b   bbb",
+    " bb     hbbbbeb",
+    "  b     hb  bbb",
+    "  bbbl  bb     ",
+    "   bbb  bb     ",
+    "   rbbbbbb     "
+  ],
+  "swatches": {
+    "swatch85": [[3, 9, "onoff"]],
+    "swatch86": [[5, 7, "onoff"]]
+  },
+  "splits": {}
+}

@@ -1,0 +1,23 @@
+{
+  "level": 27,
+  "code": "660141",
+  "start": [1, 1],
+  "grid": [
+    "bbb    bbbbbbbb",
+    "bbbbbbbbbbb  bb",
+    "bbb    bb    bb",
+    "            bhb",
+    "            bb ",
+    "bbb  ffffb  ss ",
+    "bebfffffff  bbb",
+    "bbbfffffffffbbb",
+    "     fffffffbbb",
+    "      qbbk     "
+  ],
+  "swatches": {
+    "swatch125": [[6, 9, "off"]],
+    "swatch135": [[9, 9, "off"]],
+    "swatch133": [[6, 9, "off"], [9, 9, "off"]]
+  },
+  "splits": {}
+}

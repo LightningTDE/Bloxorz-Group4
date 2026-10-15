@@ -1,0 +1,23 @@
+{
+  "level": 30,
+  "code": "280351",
+  "start": [2, 4],
+  "grid": [
+    "   bbbbbffbbbb ",
+    "   bebb     fb ",
+    "   bbb      fbh",
+    "       fbbkqbbb",
+    "  b    ff     b",
+    " hbf   ff     b",
+    "ffff   bbl  rbb",
+    "fffbfbffbf  hbl",
+    "bfffffffffffb  ",
+    " fbfff  ffffb  "
+  ],
+  "swatches": {
+    "swatch15": [[10, 3, "on"], [11, 3, "on"]],
+    "swatch142": [[10, 3, "off"], [11, 3, "off"], [9, 6, "on"], [12, 6, "on"]],
+    "swatch127": [[14, 7, "onoff"]]
+  },
+  "splits": {}
+}

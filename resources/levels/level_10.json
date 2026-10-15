@@ -1,0 +1,24 @@
+{
+  "level": 10,
+  "code": "300590",
+  "start": [10, 1],
+  "grid": [
+    " bbb     bbbbbb",
+    " beblrblrbbbbvb",
+    " bbb     bbbbl ",
+    "          bbbl ",
+    "            bb ",
+    "             b ",
+    "             b ",
+    "            bb ",
+    "     bbbbb  bb ",
+    "     bs  bbbhb "
+  ],
+  "swatches": {
+    "swatch129": [[7, 1, "onoff"], [8, 1, "onoff"], [13, 2, "onoff"], [13, 3, "onoff"]],
+    "swatch69": [[4, 1, "onoff"], [5, 1, "onoff"]]
+  },
+  "splits": {
+    "swatch131": [13, 1, 10, 1]
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "level": 33,
+  "code": "614955",
+  "start": [1, 3],
+  "grid": [
+    "     bbsbbb    ",
+    "     bbbbbbl   ",
+    "bbb  sbbsbbbbb ",
+    "bbbkqbbbbssbbs ",
+    "     bbsbbsbbb ",
+    "     bbbbbbsbb ",
+    "bbb  bbbbbbsbbb",
+    "bebkqbsb  bbbsh",
+    "bbb  bbb   bbbb",
+    "bbb         bbb"
+  ],
+  "swatches": {
+    "swatch147": [[11, 1, "on"]],
+    "swatch70": [[3, 7, "off"], [4, 7, "off"]],
+    "swatch52": [[3, 7, "off"], [4, 7, "off"]],
+    "swatch82": [[3, 7, "off"], [4, 7, "off"]],
+    "swatch93": [[3, 7, "off"], [4, 7, "off"]],
+    "swatch103": [[3, 7, "off"], [4, 7, "off"]],
+    "swatch104": [[3, 7, "off"], [4, 7, "off"]],
+    "swatch115": [[3, 7, "off"], [4, 7, "off"]],
+    "swatch133": [[3, 7, "off"], [4, 7, "off"]],
+    "swatch116": [[3, 7, "off"], [4, 7, "off"]],
+    "swatch137": [[3, 7, "off"], [4, 7, "off"]],
+    "swatch74": [[3, 7, "off"], [4, 7, "off"]],
+    "swatch67": [[3, 7, "off"], [4, 7, "off"]]
+  },
+  "splits": {}
+}

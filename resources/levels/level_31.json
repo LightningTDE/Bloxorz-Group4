@@ -1,0 +1,25 @@
+{
+  "level": 31,
+  "code": "138620",
+  "start": [12, 7],
+  "grid": [
+    "           bbbl",
+    " bbb    h  bebl",
+    " bbbkqbbblrbbbl",
+    " bbb  bbb   b  ",
+    " fff  sbb   f  ",
+    "  f   bbb  fff ",
+    "  b   bbb  bbb ",
+    "qbbblrbsbkqbbb ",
+    "qbhb  h    bbb ",
+    "qbbb           "
+  ],
+  "swatches": {
+    "swatch81": [[9, 2, "onoff"], [10, 2, "onoff"]],
+    "swatch68": [[4, 7, "onoff"], [5, 7, "onoff"]],
+    "swatch28": [[14, 2, "on"], [14, 1, "on"], [14, 0, "on"], [4, 2, "off"], [5, 2, "off"]],
+    "swatch77": [[4, 2, "off"], [5, 2, "off"], [9, 2, "off"], [10, 2, "off"], [4, 7, "off"], [5, 7, "off"], [9, 7, "off"], [10, 7, "off"]],
+    "swatch64": [[4, 2, "off"], [5, 2, "off"], [9, 2, "off"], [10, 2, "off"], [4, 7, "off"], [5, 7, "off"], [9, 7, "off"], [10, 7, "off"]]
+  },
+  "splits": {}
+}

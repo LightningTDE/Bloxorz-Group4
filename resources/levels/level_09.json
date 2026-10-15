@@ -1,0 +1,21 @@
+{
+  "level": 9,
+  "code": "074355",
+  "start": [1, 4],
+  "grid": [
+    "               ",
+    "               ",
+    "               ",
+    "bbbb   b   bbbb",
+    "bbbb   b   bbvb",
+    "bbbbbbbbbbbbbbb",
+    "      beb      ",
+    "      bbb      ",
+    "               ",
+    "               "
+  ],
+  "swatches": {},
+  "splits": {
+    "swatch134": [12, 4, 2, 4]
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "level": 13,
+  "code": "448106",
+  "start": [13, 3],
+  "grid": [
+    " bbbfbbbbfbbbb ",
+    " bb        bbb ",
+    " bb         bbb",
+    " bbb   bbb  bbb",
+    " bbbfffbeb  bbb",
+    " bbb  fbbb  b  ",
+    "   b  fffffbb  ",
+    "   bbbffbfff   ",
+    "    bbffffff   ",
+    "    bbb  bb    "
+  ],
+  "swatches": {},
+  "splits": {}
+}

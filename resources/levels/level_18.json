@@ -1,0 +1,26 @@
+{
+  "level": 18,
+  "code": "284933",
+  "start": [2, 4],
+  "grid": [
+    "               ",
+    "       s       ",
+    "bbsb   b       ",
+    "bbbbb  b       ",
+    "bsbbbbbblrbblrb",
+    "bbbbbl  b   b  ",
+    "bbsb    b   b  ",
+    "b       s  bbb ",
+    "b         bbeb ",
+    "blrh      bbbb "
+  ],
+  "swatches": {
+    "swatch14": [[8, 4, "off"], [9, 4, "off"]],
+    "swatch71": [[8, 4, "on"], [9, 4, "on"]],
+    "swatch22": [[12, 4, "off"], [13, 4, "off"], [1, 9, "off"], [2, 9, "off"]],
+    "swatch26": [[12, 4, "off"], [13, 4, "off"], [1, 9, "off"], [2, 9, "off"]],
+    "swatch39": [[5, 5, "onoff"]],
+    "swatch87": [[12, 4, "on"], [13, 4, "on"], [1, 9, "on"], [2, 9, "on"]]
+  },
+  "splits": {}
+}

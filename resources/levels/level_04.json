@@ -1,0 +1,19 @@
+{
+  "level": 4,
+  "code": "520967",
+  "start": [1, 6],
+  "grid": [
+    "               ",
+    "   fffffff     ",
+    "   fffffff     ",
+    "bbbb     bbb   ",
+    "bbb       bb   ",
+    "bbb       bb   ",
+    "bbb  bbbbfffff ",
+    "bbb  bbbbfffff ",
+    "     beb  ffbf ",
+    "     bbb  ffff "
+  ],
+  "swatches": {},
+  "splits": {}
+}
