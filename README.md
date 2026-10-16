@@ -18,7 +18,16 @@ Mẫu Pull Request nằm ở `.github/pull_request_template.md`; CI chạy unit 
 Repo GitHub nên có **gốc là thư mục `backend`** (với `Python`) và thư mục `frontend` (với `NodeJS`) để CI chạy đúng.
 
 ## Cấu trúc thư mục
-Sẽ được cập nhật sau khi chốt xong
+Bloxorz-Group4/
+├── frontend/ 
+├── resources/levels/            # Chứa 33 file màn chơi
+└── backend/                        
+    ├── app/
+    │   ├── __init__.py
+    │   ├── core/                    # Module 1: enums.py, exceptions.py, models.py, interfaces.py
+    │   ├── engine/                  # Module 2: level_loader.py, bloxorz_engine.py
+    │   └── pathsolver/              # Module 3: base.py, bfs/ids/ucs/astar_solver.py, factory.py, benchmark.py
+    └── main.py
 
 ## Quy định giữa các module
 Sẽ được cập nhật sau khi chốt xong
