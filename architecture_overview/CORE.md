@@ -1,19 +1,19 @@
-# 4. Module Core (app/core/)
+# Module Core (app/core/)
 
-## 4.1. exceptions.py — Kiểm tra lỗi
+## 1. exceptions.py — Kiểm tra lỗi
 - **BloxorzError**: Lớp cha của mọi exception trong hệ thống.
 - **LevelLoadError**: Ném khi file JSON không tồn tại hoặc sai cấu trúc.
 - **InvalidActionError**: Ném khi hành động không hợp lệ (ví dụ: gọi SWITCH khi khối chưa tách đôi).
 - **InvalidParameterError**: Ném khi truyền tham số timeout_sec <= 0 hoặc max_depth <= 0.
 - **AlgorithmNotFoundError**: Ném khi tên thuật toán không có trong SolverFactory.
 
-## 4.2. enums.py — Quy ước hằng số
+## 2. enums.py — Quy ước hằng số
 - **Action(str, Enum)**: UP, DOWN, LEFT, RIGHT, SWITCH.
 - **SwitchAction(str, Enum)**: ON = "on", OFF = "off", TOGGLE = "onoff".
 - **MoveStatus(str, Enum)**: VALID, WON, FALL_EMPTY, FALL_CLOSED_BRIDGE, FALL_FRAGILE.
 - **TileType(str, Enum)**: Xem tại mục quy ước các ký tự trên grid.
 
-## 4.3. models.py — Các cấu trúc dữ liệu dùng chung
+## 3. models.py — Các cấu trúc dữ liệu dùng chung
 - **Coord (frozen=True, order=True)**: Biểu diễn tọa độ (x, y).
   - *Fields*: x: int, y: int (khai báo x trước y để sắp xếp tự nhiên theo (x, y)).
   - *Methods*: move(dx, dy) -> Coord, manhattan_to(other) -> int (tính khoảng cách Manhattan).
@@ -33,7 +33,7 @@
   - *Thuộc tính chỉ đọc (Read-only property)*:
     - step_count: Trả về len(actions).
 
-## 4.4. interfaces.py — Định nghĩa giao tiếp giữa các module
+## 4. interfaces.py — Định nghĩa giao tiếp giữa các module
 
 ```python
 class IGameEngine(ABC):
