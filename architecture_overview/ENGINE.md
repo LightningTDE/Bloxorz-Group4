@@ -1,5 +1,5 @@
-```
-#Module Engine (app/engine/)
+### Module Engine
+
 
 ## 1. level_loader.py — LevelLoader.load(file_path) -> LevelMap
 - **Đầu vào**: Đường dẫn tới file JSON màn chơi (trong resources/levels/).
@@ -33,4 +33,3 @@
 - Khi đang tách đôi (is_split = True), chỉ khối tương ứng với active_block dịch chuyển 1 ô theo hướng chỉ định.
 - Hành động SWITCH chỉ hợp lệ khi is_split == True và dùng để đổi giá trị active_block.
 - Việc giẫm lên công tắc và tách/gộp khối sẽ cập nhật open_bridges và is_split dựa theo swatches và splits của LevelMap.
-```
