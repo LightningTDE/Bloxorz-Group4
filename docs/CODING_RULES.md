@@ -16,7 +16,7 @@ Mục tiêu: code của 6 người đọc như của một người, dễ review
 
 ## 2. Kiến trúc
 
-Cập nhật sau
+Chi tiết xem tại thư mục: [`architecture_overview`](architecture_overview)
 
 ## 3. File và cấu trúc
 - Một file một trách nhiệm; file quá nhiều dòng thì cân nhắc tách.
