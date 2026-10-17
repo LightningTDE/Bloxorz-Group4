@@ -32,7 +32,14 @@ Bloxorz-Group4/
 ```
 
 ## Quy định giữa các module
-Sẽ được cập nhật sau khi chốt xong
+```
+1. Tọa độ: Coord(x, y) với x là cột (0–14), y là dòng (0–9, dòng 0 ở trên cùng). Truy cập lưới bằng grid[y][x]. Các hướng di chuyển: UP: y−1, DOWN: y+1, LEFT: x−1, RIGHT: x+1.
+2. Import một chiều: core không import module nào. engine và pathsolver chỉ import core. main.py import cả ba. tests/ được import mọi module.
+3. Import path: Luôn dùng đường dẫn đầy đủ từ app, ví dụ: from app.core.models import BlockState. Chạy từ thư mục backend/, file pytest.ini đặt pythonpath = ....
+4. Stateless: Engine và solver không giữ trạng thái giữa các lần gọi. Phương thức apply_action không sửa đổi state đầu vào.
+5. Kiểm tra goal khi pop: Mọi solver kiểm tra goal khi lấy node ra khỏi hàng đợi, không kiểm tra lúc mới sinh node, để chỉ số expanded_nodes so sánh được công bằng giữa các thuật toán.
+```
+
 
 ## Định dạng màn chơi (`resources/levels/*.json`)
 ### 1. Cấu trúc JSON
