@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta name='robots' content='noindex'>
+	<meta charset="UTF-8">
+	<meta name="authoring-tool" content="Adobe_Animate_CC">
+	<title>bloxorz</title>
+	<link href="css/default.css" rel="stylesheet" type="text/css">
+	<link href="assets/styles.css" rel="stylesheet" type="text/css">
+
+	<!-- 1. Thư viện Vendor & Adobe Animate SDK (Đúng thứ tự phụ thuộc bắt buộc) -->
+	<script src="components/cybernate/feedback.js"></script>
+	<script src="components/jquery/jquery-2.2.4.min.js"></script>
+	<script src="components/createjs/createjs-2015.11.26.min.js"></script>
+	<script src="components/sdk/anwidget.js"></script>
+	<script src="components/ui/src/css.js"></script>
+	<script src="components/ui/src/textinput.js"></script>
+
+	<!-- 2. Adobe Animate Vector MovieClips & Assets -->
+	<script src="components/cybernate/bloxorz.js"></script>
+
+	<!-- 3. Đồng bộ Theme & Cầu nối AdobeAn/CreateJS -->
+	<script>
+		var VALID_THEMES = ["original", "gray", "holiday"];
+
+		function normalizeTheme(value) {
+			if (VALID_THEMES.indexOf(value) !== -1) {
+				return value;
+			}
+			return "original";
+		}
+
+		function getThemeFromUrl() {
+			var params = new URLSearchParams(window.location.search);
+			return normalizeTheme(params.get("img"));
+		}
+
+		function getStoredTheme() {
+			var saved = window.localStorage && window.localStorage.getItem("theme");
+			return normalizeTheme(saved);
+		}
+
+		function saveTheme(theme) {
+			window.localStorage && window.localStorage.setItem("theme", normalizeTheme(theme));
+		}
+
+		function buildThemeUrl(theme) {
+			var url = new URL(window.location.href);
+			url.searchParams.set("img", normalizeTheme(theme));
+			return url.toString();
+		}
+
+		(function syncThemeOnStartup() {
+			var params = new URLSearchParams(window.location.search);
+			var hasThemeInUrl = params.has("img") && params.get("img") !== "";
+			var themeFromUrl = getThemeFromUrl();
+			var storedTheme = getStoredTheme();
+
+			if (!hasThemeInUrl && storedTheme !== "original") {
+				window.location.replace(buildThemeUrl(storedTheme));
+				return;
+			}
+
+			saveTheme(themeFromUrl);
+		})();
+
+		var canvas, stage, exportRoot;
+		window.stage = window.stage || {
+			touchMode: false,
+			doneIntro: false,
+			localSave: { get: function() { return -1; }, save: function() {} },
+			soundSave: { get: function() { return true; }, save: function() {} }
+		};
+		window.buttonsWithSounds = window.buttonsWithSounds || [];
+		window.addButtonSounds = window.addButtonSounds || function() {};
+
+		// Khởi tạo cầu nối lib MovieClip toàn cục cho ứng dụng
+		(function setupGlobalLib() {
+			if (typeof AdobeAn !== "undefined") {
+				var compId = (AdobeAn.bootcompsLoaded && AdobeAn.bootcompsLoaded[0]) || "FE31B685947E79408F0C8768D6EC8517";
+				var comp = AdobeAn.getComposition(compId);
+				if (comp && comp.getLibrary) {
+					window.lib = comp.getLibrary();
+				}
+				if (AdobeAn.compositionLoaded) {
+					AdobeAn.compositionLoaded(compId);
+				}
+			}
+		})();
+
+		function playSound(id, loop) {
+			return createjs.Sound.play(id, createjs.Sound.INTERRUPT_EARLY, 0, 0, loop);
+		}
+
+		document.addEventListener("DOMContentLoaded", function () {
+			var imageSelect = document.getElementById("image_select");
+			if (imageSelect) {
+				imageSelect.value = getThemeFromUrl();
+			}
+		});
+	</script>
+
+	<!-- 4. Touch & UserAgent Helpers -->
+	<script type="text/javascript">
+		setTimeout(function () {
+			if (document.getElementsByTagName("canvas").length) {
+				document.getElementsByTagName("body")[0].classList.add("no-select");
+			}
+		}, 2000);
+
+		function setUserAgent(window, userAgent) {
+			if (navigator.__defineGetter__) {
+				navigator.__defineGetter__("userAgent", function () {
+					return userAgent;
+				});
+			} else if (Object.defineProperty) {
+				Object.defineProperty(navigator, "userAgent", {
+					get: function () {
+						return userAgent;
+					}
+				});
+			}
+			if (window.navigator.userAgent !== userAgent) {
+				var userAgentProp = {
+					get: function () {
+						return userAgent;
+					}
+				};
+				try {
+					Object.defineProperty(window.navigator, "userAgent", userAgentProp);
+				} catch (e) {
+					window.navigator = Object.create(navigator, {
+						userAgent: userAgentProp
+					});
+				}
+			}
+		}
+		if (window.navigator.userAgent.indexOf("Safari") >= 0 && "ontouchstart" in window && window.navigator.userAgent.indexOf("iPhone") == -1) {
+			var userAgent = "Mozilla/5.0 (iPad; CPU OS 13_1_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.1 Mobile/15E148 Safari/604.1";
+			setUserAgent(window, userAgent);
+		}
+	</script>
+
+	<!-- 5. Khởi động hệ thống Bloxorz Modular OOP (ES6 Module) -->
+	<script type="module" src="js/app.js"></script>
+</head>
+
+<body>
+	<div id="screen-split">
+		<div id="side_panel">
+			<select id="image_select" onchange="change_image()">
+				<option value="">Select Theme</option>
+				<option value="original">Original</option>
+				<option value="gray">Gray</option>
+				<option value="holiday">Holiday</option>
+			</select>
+			<div id="table_container">
+				<table id="timeTable">
+					<thead>
+						<tr>
+							<th>Stage</th>
+							<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Time</th>
+						</tr>
+					</thead>
+					<tbody id="timeRows">
+						<tr id='stage1'>
+							<td>1</td>
+							<td>-</td>
+						</tr>
+						<tr id='stage2'>
+							<td>2</td>
+							<td>-</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<div id="animation_container">
+			<canvas id="canvas" width="550" height="300"></canvas>
+			<div id="dom_overlay_container"></div>
+		</div>
+	</div>
+	<div id="_preload_div_">
+		<img id="preload_img" src="../resources/assets/preloader.gif" alt="Loading..." />
+	</div>
+
+	<script>
+		var canNotifyParent = window.parent && window.parent !== window;
+
+		function fnSendMsg() {
+			if (!canNotifyParent) return;
+			window.parent.postMessage('keypress-from-game', '*');
+		}
+
+		document.body.addEventListener('click', fnSendMsg);
+		document.addEventListener('keypress', fnSendMsg);
+		document.addEventListener('keydown', fnSendMsg);
+		document.addEventListener('keyup', fnSendMsg);
+
+		function change_image() {
+			var e = document.getElementById("image_select");
+			var selectedTheme = normalizeTheme(e && e.value);
+			saveTheme(selectedTheme);
+			window.location.href = buildThemeUrl(selectedTheme);
+		}
+	</script>
+</body>
+
+</html>

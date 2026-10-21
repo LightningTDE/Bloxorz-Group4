@@ -1,0 +1,22 @@
+#loadLevelTextInput {
+    box-sizing: border-box;
+    position: absolute;
+    background-color: #28140c;
+    color: #fff8ee;
+    border: 1px solid rgba(255, 255, 255, 0.45);
+    border-radius: 3px;
+    font-family: monospace;
+    text-align: center;
+    letter-spacing: 4px;
+    caret-color: #fff8ee;
+    outline: none;
+    pointer-events: auto;
+    z-index: 10;
+    margin: 0;
+    padding: 0;
+    transform: none !important;
+}
+
+html {
+    background-color: #000;
+}
