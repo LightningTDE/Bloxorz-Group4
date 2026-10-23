@@ -391,6 +391,25 @@ export class Board {
         this.triggerSwitches(linkedDoors);
     }
 
+    /**
+     * Lấy danh sách trạng thái đóng/mở của toàn bộ các ô cầu trên bàn chơi theo thứ tự lưới.
+     * Tác dụng: Phục vụ đóng gói dữ liệu trạng thái hiện tại (doors_state) gửi về cho thuật toán Backend.
+     *
+     * @returns {Array<boolean>} Danh sách boolean (true = mở/đi được, false = đóng/sập).
+     */
+    getDoorsState() {
+        const states = [];
+        for (let y = 0; y < GRID_CONFIG.ROWS; y++) {
+            for (let x = 0; x < GRID_CONFIG.COLS; x++) {
+                const tile = this.getTileAt(x, y);
+                if (tile && (tile.type === "l" || tile.type === "r" || tile.type === "k" || tile.type === "q")) {
+                    states.push(Boolean(tile.isDoorOpen));
+                }
+            }
+        }
+        return states;
+    }
+
     // =========================================================================
     // 4. DỌN DẸP BÀN CỜ (BOARD CLEANUP)
     // =========================================================================

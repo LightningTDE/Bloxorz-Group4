@@ -8,6 +8,7 @@ import { AudioService } from "./services/AudioService.js";
 import { InputService } from "./services/InputService.js";
 import { StorageService } from "./services/StorageService.js";
 import { TimerService } from "./services/TimerService.js";
+import { SolverService } from "./services/SolverService.js";
 
 // 3. UI Components
 import { Renderer } from "./ui/Renderer.js";
@@ -144,6 +145,9 @@ class App {
 
             // 6. Kích hoạt Game
             engine.init();
+
+            // 7. Kết nối bảng điều khiển AI Solver với Backend Python API
+            App._setupSolverPanel(engine);
         });
 
         // Bắt đầu nạp toàn bộ ảnh và 40 file âm thanh
@@ -269,6 +273,105 @@ class App {
         });
         engineRef = engine;
         return engine;
+    }
+
+    /**
+     * Khởi tạo và thiết lập các sự kiện tương tác cho bảng điều khiển AI Solver Panel.
+     * Tác dụng: Kết nối nút Auto Solve, Stop, Hint và hiển thị số liệu hiệu năng từ Backend.
+     * @private
+     * @param {GameEngine} engine
+     */
+    static _setupSolverPanel(engine) {
+        const panel = document.getElementById("solver_panel");
+        if (!panel) return;
+
+        const algoSelect = document.getElementById("algo_select");
+        const heuristicContainer = document.getElementById("heuristic_container");
+        const heuristicSelect = document.getElementById("heuristic_select");
+        const btnSolve = document.getElementById("btn_solve");
+        const btnStop = document.getElementById("btn_stop");
+        const btnHint = document.getElementById("btn_hint");
+        const statusBox = document.getElementById("solver_status");
+        const metricsBox = document.getElementById("solver_metrics");
+
+        const metricTime = document.getElementById("metric_time");
+        const metricRam = document.getElementById("metric_ram");
+        const metricNodes = document.getElementById("metric_nodes");
+        const metricSteps = document.getElementById("metric_steps");
+
+        const solver = new SolverService({
+            baseUrl: "http://localhost:8000",
+            gameEngine: engine,
+            onStatusChange: (text, type) => {
+                if (!statusBox) return;
+                statusBox.textContent = text;
+                statusBox.className = `solver-status ${type || "idle"}`;
+
+                if (solver.isSolving) {
+                    if (btnSolve) btnSolve.style.display = "none";
+                    if (btnStop) btnStop.style.display = "inline-block";
+                } else {
+                    if (btnSolve) btnSolve.style.display = "inline-block";
+                    if (btnStop) btnStop.style.display = "none";
+                }
+            },
+            onMetricsUpdate: (metrics) => {
+                if (!metricsBox) return;
+                metricsBox.style.display = "flex";
+                if (metricTime) metricTime.textContent = metrics.timeMs != null ? metrics.timeMs.toFixed(2) : "-";
+                if (metricRam) metricRam.textContent = metrics.memoryKb != null ? metrics.memoryKb.toFixed(2) : "-";
+                if (metricNodes) metricNodes.textContent = metrics.nodes != null ? metrics.nodes : "-";
+                if (metricSteps) metricSteps.textContent = metrics.steps != null ? metrics.steps : "-";
+            }
+        });
+
+        // Thu gọn / Mở rộng bảng Solver để tiết kiệm không gian màn hình
+        const toggleHeader = document.getElementById("solver_toggle_header");
+        const toggleBtn = document.getElementById("solver_toggle_btn");
+        const solverBody = document.getElementById("solver_body");
+
+        if (toggleHeader && solverBody) {
+            toggleHeader.addEventListener("click", () => {
+                const isHidden = solverBody.style.display === "none";
+                solverBody.style.display = isHidden ? "block" : "none";
+                if (toggleBtn) {
+                    toggleBtn.textContent = isHidden ? "▼" : "▲";
+                }
+                // Phát sự kiện resize để canvas và layout căn chỉnh lại
+                window.dispatchEvent(new Event("resize"));
+            });
+        }
+
+        // Ẩn/hiện chọn Heuristic (chỉ A* mới dùng Heuristic)
+        if (algoSelect && heuristicContainer) {
+            algoSelect.addEventListener("change", () => {
+                const isAStar = algoSelect.value === "A*";
+                heuristicContainer.style.display = isAStar ? "flex" : "none";
+            });
+        }
+
+        // Bấm nút Auto Solve
+        if (btnSolve) {
+            btnSolve.addEventListener("click", async () => {
+                const algo = algoSelect ? algoSelect.value : "A*";
+                const heur = heuristicSelect ? heuristicSelect.value : "manhattan_div2";
+                await solver.startSolve({ algorithm: algo, heuristic: heur });
+            });
+        }
+
+        // Bấm nút Stop (Dừng auto solve để người chơi tự chơi tiếp)
+        if (btnStop) {
+            btnStop.addEventListener("click", () => {
+                solver.stopSolve();
+            });
+        }
+
+        // Bấm nút Hint (Gợi ý 1 nước đi)
+        if (btnHint) {
+            btnHint.addEventListener("click", async () => {
+                await solver.getHint();
+            });
+        }
     }
 }
 
