@@ -1,7 +1,5 @@
-import { GAME_EVENTS } from "./EventBus.js";
 import { GAME_STATES } from "./StateMachine.js";
-import { BLOCK_STATE, FALL_MAP } from "../utils/Constants.js";
-import { Isometric } from "../utils/Isometric.js";
+import { BLOCK_STATE } from "../utils/Constants.js";
 import { AnimationHelper } from "../utils/AnimationHelper.js";
 import { Board } from "../entities/Board.js";
 import { Block } from "../entities/Block.js";
@@ -969,6 +967,94 @@ export class GameEngine {
         this._board.clear();
         this._renderer.clearBoard();
         this._levelMoves = 0;
+    }
+
+    // =========================================================================
+    // 6. TÍCH HỢP VỚI HỆ THỐNG GIẢI THUẬT (AI SOLVER INTEGRATION)
+    // =========================================================================
+
+    /**
+     * Thu thập trạng thái hiện tại của khối gạch và các cây cầu trên sàn.
+     * Tác dụng: Đóng gói dữ liệu gửi về Backend để giải tiếp từ vị trí hiện tại.
+     *
+     * @returns {Object|null} Payload trạng thái tương thích CurrentStateSchema.
+     */
+    getCurrentState() {
+        if (!this._blocks || this._blocks.length === 0) return null;
+        const focusIndex = this._input ? this._input.getFocusIndex() : 0;
+        const activeBlock = this._blocks[focusIndex] || this._blocks[0];
+
+        return {
+            x: activeBlock.x,
+            y: activeBlock.y,
+            position: activeBlock.state || "up",
+            doors_state: this._board.getDoorsState(),
+            is_split: this._blocks.length > 1,
+            blocks: this._blocks.map((b) => [b.x, b.y]),
+            active_index: focusIndex
+        };
+    }
+
+    /**
+     * Lấy số thứ tự màn chơi hiện tại.
+     * @returns {number}
+     */
+    getCurrentLevelNumber() {
+        return this._currentLevelNumber;
+    }
+
+    /**
+     * Kiểm tra khối gạch hiện tại có đang đứng yên (sẵn sàng lăn bước tiếp theo) hay không.
+     * @returns {boolean}
+     */
+    isCurrentBlockIdle() {
+        const focusIndex = this._input ? this._input.getFocusIndex() : 0;
+        const focusView = this._blockViews[focusIndex];
+        return Boolean(focusView && focusView.isIdle());
+    }
+
+    /**
+     * Thực thi một bước đi từ AI Solver ("up", "down", "left", "right", "swap").
+     * @param {string} action
+     * @returns {boolean} True nếu lệnh lăn đã được phát đi thành công.
+     */
+    executeAction(action) {
+        if (!action) return false;
+        if (action === "swap") {
+            if (this._input) this._input.switchFocus();
+            return true;
+        }
+        const focusIndex = this._input ? this._input.getFocusIndex() : 0;
+        const focusView = this._blockViews[focusIndex];
+        if (focusView && focusView.isIdle()) {
+            focusView.roll(action);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Khóa hoặc mở khóa bàn phím và phím ảo của người chơi trong quá trình Auto Solve.
+     * @param {boolean} locked True để khóa (chặn người chơi), False để mở lại.
+     * @returns {void}
+     */
+    lockPlayerInput(locked) {
+        if (this._input) {
+            this._input.setTrapKeys(!locked);
+        }
+        if (this._controls) {
+            if (locked) {
+                this._controls.hide();
+            } else {
+                const hasSplits = Array.isArray(this._currentLevelData && this._currentLevelData.splits) && this._currentLevelData.splits.length > 0;
+                this._controls.setupForLevel(hasSplits);
+                if (this._blocks.length > 1) {
+                    this._controls.showSplit();
+                } else {
+                    this._controls.showStandard();
+                }
+            }
+        }
     }
 
     /**

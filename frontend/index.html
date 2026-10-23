@@ -147,64 +147,105 @@
 </head>
 
 <body>
-	<div id="screen-split">
-		<div id="side_panel">
-			<select id="image_select" onchange="change_image()">
-				<option value="">Select Theme</option>
-				<option value="original">Original</option>
-				<option value="gray">Gray</option>
-				<option value="holiday">Holiday</option>
-			</select>
-			<div id="table_container">
-				<table id="timeTable">
-					<thead>
-						<tr>
-							<th>Stage</th>
-							<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Time</th>
-						</tr>
-					</thead>
-					<tbody id="timeRows">
-						<tr id='stage1'>
-							<td>1</td>
-							<td>-</td>
-						</tr>
-						<tr id='stage2'>
-							<td>2</td>
-							<td>-</td>
-						</tr>
-					</tbody>
-				</table>
+<div id="screen-split">
+	<div id="side_panel">
+		<select id="image_select" onchange="change_image()">
+			<option value="">Select Theme</option>
+			<option value="original">Original</option>
+			<option value="gray">Gray</option>
+			<option value="holiday">Holiday</option>
+		</select>
+		<div id="table_container">
+			<table id="timeTable">
+				<thead>
+				<tr>
+					<th>Stage</th>
+					<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Time</th>
+				</tr>
+				</thead>
+				<tbody id="timeRows">
+				<tr id='stage1'>
+					<td>1</td>
+					<td>-</td>
+				</tr>
+				<tr id='stage2'>
+					<td>2</td>
+					<td>-</td>
+				</tr>
+				</tbody>
+			</table>
+		</div>
+
+		<!-- AI Solver Panel (Kết nối trực tiếp Backend Python FastAPI) -->
+		<div id="solver_panel">
+			<div class="solver-header-wrapper" id="solver_toggle_header" title="Bấm để ẩn/hiện bảng Solver">
+				<div class="solver-header">Bloxorz Pathfinder</div>
+				<button class="solver-toggle-btn" id="solver_toggle_btn">▼</button>
+			</div>
+			<div id="solver_body">
+				<div class="solver-controls">
+					<div class="solver-field">
+						<label for="algo_select">Thuật toán:</label>
+						<select id="algo_select">
+							<option value="A*">A* (Heuristic)</option>
+							<option value="BFS">BFS (Chiều rộng)</option>
+							<option value="UCS">UCS (Chi phí đồng nhất)</option>
+							<option value="IDS">IDS (Sâu dần)</option>
+						</select>
+					</div>
+					<div class="solver-field" id="heuristic_container">
+						<label for="heuristic_select">Hàm Heuristic:</label>
+						<select id="heuristic_select">
+							<option value="manhattan_div2">Manhattan / 2</option>
+							<option value="orientation_aware">Orientation Aware</option>
+							<option value="relaxed_point">Relaxed Point</option>
+						</select>
+					</div>
+					<div class="solver-buttons">
+						<button id="btn_solve" class="btn-solver btn-primary" title="Tự động tìm đường và giải">Auto Solve</button>
+						<button id="btn_stop" class="btn-solver btn-danger" style="display: none;" title="Dừng giải để tự chơi tiếp">Stop</button>
+						<button id="btn_hint" class="btn-solver btn-secondary" title="Gợi ý 1 nước đi tiếp theo">Gợi ý</button>
+					</div>
+				</div>
+				<div id="solver_status" class="solver-status">Sẵn sàng</div>
+				<div id="solver_metrics" class="solver-metrics" style="display: none;">
+					<div>Thời gian: <span id="metric_time">-</span> ms</div>
+					<div>Đỉnh RAM: <span id="metric_ram">-</span> KB</div>
+					<div>Đã duyệt: <span id="metric_nodes">-</span> nodes</div>
+					<div>Số bước: <span id="metric_steps">-</span></div>
+				</div>
 			</div>
 		</div>
-		<div id="animation_container">
-			<canvas id="canvas" width="550" height="300"></canvas>
-			<div id="dom_overlay_container"></div>
-		</div>
 	</div>
-	<div id="_preload_div_">
-		<img id="preload_img" src="../resources/assets/preloader.gif" alt="Loading..." />
+	<div id="animation_container">
+		<canvas id="canvas" width="550" height="300"></canvas>
+		<div id="dom_overlay_container"></div>
 	</div>
+</div>
+<div id="_preload_div_">
+	<img id="preload_img" src="../resources/assets/preloader.gif" alt="Loading..." />
+</div>
 
-	<script>
-		var canNotifyParent = window.parent && window.parent !== window;
+<script>
+	var canNotifyParent = window.parent && window.parent !== window;
 
-		function fnSendMsg() {
-			if (!canNotifyParent) return;
-			window.parent.postMessage('keypress-from-game', '*');
-		}
+	function fnSendMsg() {
+		if (!canNotifyParent) return;
+		window.parent.postMessage('keypress-from-game', '*');
+	}
 
-		document.body.addEventListener('click', fnSendMsg);
-		document.addEventListener('keypress', fnSendMsg);
-		document.addEventListener('keydown', fnSendMsg);
-		document.addEventListener('keyup', fnSendMsg);
+	document.body.addEventListener('click', fnSendMsg);
+	document.addEventListener('keypress', fnSendMsg);
+	document.addEventListener('keydown', fnSendMsg);
+	document.addEventListener('keyup', fnSendMsg);
 
-		function change_image() {
-			var e = document.getElementById("image_select");
-			var selectedTheme = normalizeTheme(e && e.value);
-			saveTheme(selectedTheme);
-			window.location.href = buildThemeUrl(selectedTheme);
-		}
-	</script>
+	function change_image() {
+		var e = document.getElementById("image_select");
+		var selectedTheme = normalizeTheme(e && e.value);
+		saveTheme(selectedTheme);
+		window.location.href = buildThemeUrl(selectedTheme);
+	}
+</script>
 </body>
 
 </html>
