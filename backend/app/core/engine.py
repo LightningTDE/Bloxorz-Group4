@@ -1,4 +1,4 @@
-from typing import Dict, Any, List, Tuple, Optional
+from typing import Any
 from app.core.interfaces import IGameEngine
 from app.core.models import (
     STANDING,
@@ -45,19 +45,19 @@ class BloxorzEngine(IGameEngine):
     door_index_map : dict of {tuple of (int, int): int}
         Bảng ánh xạ tọa độ ô cầu sang chỉ số thứ tự trong tuple doors_state.
     """
-    def __init__(self, level_dict: Dict[str, Any]):
+    def __init__(self, level_dict: dict[str, Any]):
         self.level_number = level_dict.get("level", 1)
         self.code = level_dict.get("code", "")
-        self.grid: List[str] = level_dict.get("grid", [])
-        self.start: Tuple[int, int] = tuple(level_dict.get("start", [0, 0]))
-        self.swatches: Dict[str, Any] = level_dict.get("swatches", {})
-        self.splits: Dict[str, Any] = level_dict.get("splits", {})
+        self.grid: list[str] = level_dict.get("grid", [])
+        self.start: tuple[int, int] = tuple(level_dict.get("start", [0, 0]))
+        self.swatches: dict[str, Any] = level_dict.get("swatches", {})
+        self.splits: dict[str, Any] = level_dict.get("splits", {})
 
         self.rows = GRID_CONFIG["rows"]
         self.cols = GRID_CONFIG["cols"]
 
         # Lập chỉ mục các ô cầu mở/đóng (door blocks)
-        self.door_coords: List[Tuple[int, int]] = []
+        self.door_coords: list[tuple[int, int]] = []
         initial_doors = []
         for r in range(self.rows):
             row_str = self.grid[r]
@@ -91,7 +91,7 @@ class BloxorzEngine(IGameEngine):
             is_split=False
         )
 
-    def is_cell_passable(self, x: int, y: int, doors_state: Tuple[bool, ...]) -> bool:
+    def is_cell_passable(self, x: int, y: int, doors_state: tuple[bool, ...]) -> bool:
         """Kiểm tra một ô tọa độ có phải là bề mặt sàn vững chắc để khối gạch đứng lên hay không.
 
         Parameters
@@ -119,7 +119,7 @@ class BloxorzEngine(IGameEngine):
         return True
 
     @staticmethod
-    def roll_normal(p: int, x: int, y: int, move: str) -> Optional[Tuple[int, int, int]]:
+    def roll_normal(p: int, x: int, y: int, move: str) -> tuple[int, int, int] | None:
         """Tính toán quy tắc hình học 3D khi lật khối 1x2 theo 4 hướng cơ bản.
 
         Parameters
@@ -157,10 +157,10 @@ class BloxorzEngine(IGameEngine):
 
     def trigger_switches(
         self,
-        occupied_cells: List[Tuple[int, int]],
+        occupied_cells: list[tuple[int, int]],
         is_standing_full: bool,
-        current_doors: Tuple[bool, ...]
-    ) -> Tuple[bool, ...]:
+        current_doors: tuple[bool, ...]
+    ) -> tuple[bool, ...]:
         """Kích hoạt và cập nhật trạng thái đóng/mở của các cây cầu khi khối gạch đè lên công tắc.
 
         Parameters
@@ -206,7 +206,7 @@ class BloxorzEngine(IGameEngine):
 
         return tuple(new_doors) if changed else current_doors
 
-    def transition(self, state: BloxorzState, move: str) -> Tuple[Optional[BloxorzState], str, str]:
+    def transition(self, state: BloxorzState, move: str) -> tuple[BloxorzState | None, str, str]:
         """Thực hiện một bước di chuyển từ trạng thái hiện tại và kiểm tra kết quả vật lý.
 
         Parameters
@@ -362,7 +362,7 @@ class BloxorzEngine(IGameEngine):
         return final_state, 'active', 'Hợp lệ'
 
     def is_touching_fragile(self, state: BloxorzState) -> bool:
-        "Kiểm tra xem khối có đang đứng trên ô dễ vỡ hay không, phục vụ tính cost cho UCS Solver"
+        """Kiểm tra xem khối có đang đứng trên ô dễ vỡ hay không, phục vụ tính cost cho UCS Solver"""
         
         cells_occupied = state.get_occupied_cells()
         for cell in cells_occupied:
@@ -371,7 +371,7 @@ class BloxorzEngine(IGameEngine):
                 return True
         return False
 
-    def is_goal(self, state: Optional[BloxorzState]) -> bool:
+    def is_goal(self, state: BloxorzState | None) -> bool:
         """Kiểm tra khối gạch đã đứng thẳng an toàn vào ô hố đích 'e' hay chưa.
 
         Parameters
@@ -393,7 +393,7 @@ class BloxorzEngine(IGameEngine):
             and self.grid[state.y][state.x] == 'e'
         )
 
-    def get_valid_actions(self, state: BloxorzState) -> List[str]:
+    def get_valid_actions(self, state: BloxorzState) -> list[str]:
         """Trả về danh sách các nước đi hợp lệ (không bị rơi vực) từ trạng thái hiện tại.
 
         Parameters
@@ -414,7 +414,7 @@ class BloxorzEngine(IGameEngine):
                 actions.append(act)
         return actions
 
-    def get_successors(self, state: BloxorzState) -> List[Tuple[str, BloxorzState, float]]:
+    def get_successors(self, state: BloxorzState) -> list[tuple[str, BloxorzState, float]]:
         """Sinh danh sách các trạng thái kế tiếp hợp lệ kèm hành động và chi phí di chuyển.
         Cài đặt theo phương thức trừu tượng theo giao diện IGameEngine phục vụ các thuật toán tìm kiếm.
 
@@ -428,7 +428,7 @@ class BloxorzEngine(IGameEngine):
         list of tuple of (str, BloxorzState, float)
             Danh sách gồm bộ ba (action, next_state, cost) với cost mặc định là 1.0 cho mỗi bước lật.
         """
-        successors: List[Tuple[str, BloxorzState, float]] = []
+        successors: list[tuple[str, BloxorzState, float]] = []
         available = BASIC_MOVES + (['swap'] if state.is_split else [])
         for act in available:
             next_state, status, _ = self.transition(state, act)

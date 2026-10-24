@@ -1,11 +1,10 @@
 import json
 from pathlib import Path
-from typing import Dict, Any, List
+from typing import Any
 from app.core.error_handler import LevelLoadError
 from app.utils.logger import setup_logger
 
 logger = setup_logger("level_loader")
-
 
 class LevelLoader:
     """Bộ nạp và xử lý dữ liệu cấu hình các màn chơi của Bloxorz từ file JSON.
@@ -41,9 +40,9 @@ class LevelLoader:
             else:
                 self.levels_dir = candidate_1
 
-        self._cache: Dict[int, Dict[str, Any]] = {}
+        self._cache: dict[int, dict[str, Any]] = {}
 
-    def load_level(self, level_number: int) -> Dict[str, Any]:
+    def load_level(self, level_number: int) -> dict[str, Any]:
         """Nạp dữ liệu cấu hình của một màn chơi cụ thể theo số thứ tự (1..33).
 
         Parameters
@@ -92,7 +91,7 @@ class LevelLoader:
                 details={"filepath": str(filepath), "error": str(e)}
             )
 
-    def list_all_levels(self) -> List[Dict[str, Any]]:
+    def list_all_levels(self) -> list[dict[str, Any]]:
         """Lấy danh sách tóm tắt toàn bộ 33 màn chơi cùng mã passcode.
 
         Returns

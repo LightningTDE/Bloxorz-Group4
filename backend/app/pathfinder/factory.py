@@ -1,4 +1,4 @@
-from typing import List, Dict, Type, Any
+from typing import Any
 from app.pathfinder.base import BaseSolver
 from app.pathfinder.bfs.bfs_solver import BFSSolver
 from app.pathfinder.ids.ids_solver import IDSSolver
@@ -14,7 +14,7 @@ class SolverFactory:
     _solvers : dict of {str: type of BaseSolver}
         Bảng ánh xạ tên thuật toán chuẩn hóa với lớp tương ứng.
     """
-    _solvers: Dict[str, Type[BaseSolver]] = {
+    _solvers: dict[str, type[BaseSolver]] = {
         "BFS": BFSSolver,
         "IDS": IDSSolver,
         "UCS": UCSSolver,
@@ -54,7 +54,7 @@ class SolverFactory:
         return solver_cls(**kwargs)
 
     @classmethod
-    def create_all(cls, **kwargs: Any) -> List[BaseSolver]:
+    def create_all(cls, **kwargs: Any) -> list[BaseSolver]:
         """Tạo danh sách gồm đầy đủ 4 thuật toán chuẩn phục vụ chạy thực nghiệm so sánh.
 
         Parameters

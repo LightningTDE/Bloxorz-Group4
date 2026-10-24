@@ -1,4 +1,4 @@
-from typing import Optional, Dict, Any
+from typing import Any
 try:
     from fastapi import FastAPI, Request
     from fastapi.responses import JSONResponse
@@ -35,7 +35,7 @@ class BloxorzError(Exception):
     def __init__(
         self,
         message: str,
-        details: Optional[Dict[str, Any]] = None,
+        details: dict[str, Any] | None = None,
         status_code: int = 400
     ):
         super().__init__(message)
@@ -63,7 +63,7 @@ class NoSolutionFoundError(BloxorzError):
         level: int,
         expanded_nodes: int,
         algorithm: str = "A*",
-        details: Optional[Dict[str, Any]] = None
+        details: dict[str, Any] | None = None
     ):
         msg = (
             f"Không tìm thấy lời giải cho Level {level} bằng thuật toán {algorithm} "
@@ -99,7 +99,7 @@ class SearchTimeoutError(BloxorzError):
         timeout_sec: float,
         expanded_nodes: int,
         algorithm: str = "A*",
-        details: Optional[Dict[str, Any]] = None
+        details: dict[str, Any] | None = None
     ):
         msg = (
             f"Thuật toán {algorithm} vượt quá thời gian cho phép ({timeout_sec:.2f}s) "
@@ -135,7 +135,7 @@ class InvalidStateError(BloxorzError):
     details : dict of {str: Any}
         Dữ liệu trạng thái vi phạm.
     """
-    def __init__(self, message: str, details: Optional[Dict[str, Any]] = None):
+    def __init__(self, message: str, details: dict[str, Any] | None = None):
         logger.warning(f"[INVALID_STATE] {message} | Details: {details}")
         super().__init__(message=message, details=details, status_code=400)
 
@@ -152,7 +152,7 @@ class LevelLoadError(BloxorzError):
     details : dict of {str: Any} or None, optional, default: None
         Thông tin đường dẫn file hoặc ngoại lệ gốc.
     """
-    def __init__(self, level: int, reason: str, details: Optional[Dict[str, Any]] = None):
+    def __init__(self, level: int, reason: str, details: dict[str, Any] | None = None):
         msg = f"Lỗi nạp màn chơi Level {level}: {reason}"
         logger.error(f"[LEVEL_LOAD_ERROR] {msg} | Details: {details}")
         info = details or {}
@@ -170,7 +170,7 @@ class AlgorithmNotFoundError(BloxorzError):
     supported_algorithms : list of str or None, optional
         Danh sách các thuật toán hiện được hệ thống hỗ trợ.
     """
-    def __init__(self, algorithm_name: str, supported_algorithms: Optional[list] = None):
+    def __init__(self, algorithm_name: str, supported_algorithms: list | None = None):
         supported = supported_algorithms or ["BFS", "IDS", "UCS", "A*"]
         msg = (
             f"Thuật toán '{algorithm_name}' không được hỗ trợ. "
@@ -197,12 +197,12 @@ def register_error_handlers(app: FastAPI) -> None:
     None
     """
     @app.exception_handler(BloxorzError)
-    async def bloxorz_exception_handler(request: Request, exc: BloxorzError) -> JSONResponse:
+    async def bloxorz_exception_handler(_request: Request, exc: BloxorzError) -> JSONResponse:
         """Bộ xử lý bắt giữ và phản hồi ngoại lệ thuộc hệ thống Bloxorz.
 
         Parameters
         ----------
-        request : Request
+        _request : Request
             Yêu cầu HTTP gửi đến máy chủ.
         exc : BloxorzError
             Ngoại lệ BloxorzError phát sinh.
@@ -223,12 +223,12 @@ def register_error_handlers(app: FastAPI) -> None:
         )
 
     @app.exception_handler(Exception)
-    async def global_exception_handler(request: Request, exc: Exception) -> JSONResponse:
+    async def global_exception_handler(_request: Request, exc: Exception) -> JSONResponse:
         """Bộ xử lý bắt giữ ngoại lệ toàn cục chưa được phân loại (HTTP 500).
 
         Parameters
         ----------
-        request : Request
+        _request : Request
             Yêu cầu HTTP gửi đến máy chủ.
         exc : Exception
             Ngoại lệ hệ thống chưa bắt được.

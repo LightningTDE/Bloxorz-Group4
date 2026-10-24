@@ -1,18 +1,5 @@
-from typing import List, Dict, Any, Optional
-
-try:
-    from pydantic import BaseModel, Field
-except ImportError:
-    class BaseModel:  # type: ignore
-        def __init__(self, **kwargs):
-            for k, v in kwargs.items():
-                setattr(self, k, v)
-
-    def Field(default=None, default_factory=None, **kwargs):  # type: ignore
-        if default_factory is not None:
-            return default_factory()
-        return default
-
+from typing import Any
+from pydantic import BaseModel, Field
 
 class SearchMetricsSchema(BaseModel):
     """Mô hình chứa 4 chỉ số đo lường hiệu năng của thuật toán.
@@ -61,11 +48,11 @@ class SolveResponseSchema(BaseModel):
     success: bool = Field(default=True, description="Trạng thái giải thành công hay thất bại")
     algorithm: str = Field(..., description="Tên thuật toán đã sử dụng")
     level_number: int = Field(..., description="Số thứ tự màn chơi")
-    actions: List[str] = Field(default_factory=list, description="Chuỗi các hành động lật khối ['right', 'down', ...]")
+    actions: list[str] = Field(default_factory=list, description="Chuỗi các hành động lật khối ['right', 'down', ...]")
     step_count: int = Field(..., description="Tổng số bước lật khối đến đích")
     metrics: SearchMetricsSchema = Field(..., description="Bộ 4 chỉ số đo lường hiệu năng")
-    message: Optional[str] = Field(default=None, description="Thông điệp trạng thái hoặc kết quả đo kiểm benchmark")
-    benchmark_summary: Optional[List[Dict[str, Any]]] = Field(default=None, description="Tóm tắt benchmark giữa các thuật toán")
+    message: str | None = Field(default=None, description="Thông điệp trạng thái hoặc kết quả đo kiểm benchmark")
+    benchmark_summary: list[dict[str, Any]] | None = Field(default=None, description="Tóm tắt benchmark giữa các thuật toán")
 
 
 class HintResponseSchema(BaseModel):
@@ -82,7 +69,7 @@ class HintResponseSchema(BaseModel):
     """
 
     success: bool = Field(default=True, description="Trạng thái gợi ý thành công")
-    next_action: Optional[str] = Field(None, description="Hành động tiếp theo tốt nhất ('up', 'down', 'left', 'right', 'switch')")
+    next_action: str | None = Field(None, description="Hành động tiếp theo tốt nhất ('up', 'down', 'left', 'right', 'switch')")
     remaining_steps: int = Field(..., description="Số bước còn lại ước tính để đến đích")
 
 
@@ -134,4 +121,4 @@ class BenchmarkResponseSchema(BaseModel):
 
     success: bool = Field(default=True, description="Trạng thái thực nghiệm thành công")
     total_runs: int = Field(..., description="Tổng số lượt chạy")
-    results: List[BenchmarkItemSchema] = Field(default_factory=list, description="Danh sách kết quả đo kiểm")
+    results: list[BenchmarkItemSchema] = Field(default_factory=list, description="Danh sách kết quả đo kiểm")

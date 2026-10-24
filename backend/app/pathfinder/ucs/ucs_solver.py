@@ -1,3 +1,4 @@
+from app.core.interfaces import IGameEngine
 from app.pathfinder.base import BaseSolver, SearchOutcome
 from app.core.models import BloxorzState
 from app.core.engine import BloxorzEngine
@@ -23,12 +24,13 @@ class UCSSolver(BaseSolver):
     def __init__(self, measure_memory: bool = True):
         super().__init__(measure_memory=measure_memory)
 
-    def _get_effects(self, cur_state: BloxorzState, next_state: BloxorzState, engine: BloxorzEngine) -> set:
-        "Kiểm tra nước đi có dẫn đến hậu quả nguy hiểm không (đóng cầu hoặc chạm ô dễ vỡ)"
+    @staticmethod
+    def _get_effects(cur_state: BloxorzState, next_state: BloxorzState, engine: BloxorzEngine) -> set:
+        """Kiểm tra nước đi có dẫn đến hậu quả nguy hiểm không (đóng cầu hoặc chạm ô dễ vỡ)"""
         effects = set()
 
-        for cur, next in zip(cur_state.doors_state, next_state.doors_state):
-            if (cur == True) and (next == False):
+        for cur, _next in zip(cur_state.doors_state, next_state.doors_state):
+            if (cur == True) and (_next == False):
                 effects.add("bridge_off")
                 break
 
@@ -64,7 +66,7 @@ class UCSSolver(BaseSolver):
 
     def _search(
         self,
-        engine: BloxorzEngine,
+        engine: IGameEngine,
         start_state: BloxorzState,
         deadline: float
     ) -> SearchOutcome:

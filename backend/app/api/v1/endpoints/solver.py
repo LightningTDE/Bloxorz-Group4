@@ -1,4 +1,3 @@
-from typing import Optional
 from fastapi import APIRouter
 from app.api.schemas.request import SolveRequestSchema, HintRequestSchema
 from app.api.schemas.response import SolveResponseSchema, HintResponseSchema, SearchMetricsSchema
@@ -24,7 +23,7 @@ HEURISTIC_MAP = {
 
 def _build_start_state(
     engine: BloxorzEngine,
-    current_state_req: Optional[object]
+    current_state_req: object | None
 ) -> BloxorzState:
     """Tái tạo trạng thái BloxorzState từ dữ liệu frontend gửi lên.
 

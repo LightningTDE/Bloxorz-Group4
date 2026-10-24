@@ -1,6 +1,7 @@
 import time
 import tracemalloc
-from typing import Callable, Any, Tuple
+from collections.abc import Callable
+from typing import Any
 from app.utils.logger import setup_logger
 
 logger = setup_logger("profiler")
@@ -8,7 +9,7 @@ logger = setup_logger("profiler")
 class Profiler:
     # Tiện ích đo đạc hiệu năng CPU (thời gian) và đỉnh bộ nhớ RAM (Memory Peak).
     @staticmethod
-    def measure_execution(func: Callable, *args: Any, **kwargs: Any) -> Tuple[Any, float, float]:
+    def measure_execution(func: Callable, *args: Any, **kwargs: Any) -> tuple[Any, float, float]:
         """Thực thi một hàm đồng thời đo đạc thời gian chạy (ms) và đỉnh RAM tiêu thụ (KB).
 
         Parameters
@@ -27,7 +28,6 @@ class Profiler:
         """
         tracemalloc.start()
         start_time = time.perf_counter()
-        result = None
         try:
             result = func(*args, **kwargs)
         finally:

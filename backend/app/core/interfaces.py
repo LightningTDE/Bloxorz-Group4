@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-from typing import List, Tuple, Optional
 from app.core.models import BloxorzState, SearchResult
 
 class IGameEngine(ABC):
@@ -26,7 +25,7 @@ class IGameEngine(ABC):
         pass
 
     @abstractmethod
-    def get_successors(self, state: BloxorzState) -> List[Tuple[str, BloxorzState, float]]:
+    def get_successors(self, state: BloxorzState) -> list[tuple[str, BloxorzState, float]]:
         """Sinh danh sách các trạng thái kế tiếp hợp lệ.
 
         Returns
@@ -48,7 +47,7 @@ class IHeuristic(ABC):
     name: str = "BaseHeuristic"
 
     @abstractmethod
-    def calculate(self, state: BloxorzState, goal_coord: Tuple[int, int]) -> float:
+    def calculate(self, state: BloxorzState, goal_coord: tuple[int, int]) -> float:
         """Tính toán giá trị heuristic h(n) từ trạng thái hiện tại tới đích.
 
         Parameters
@@ -80,7 +79,7 @@ class IPathSolver(ABC):
     def solve(
         self,
         engine: IGameEngine,
-        start_state: Optional[BloxorzState] = None,
+        start_state: BloxorzState | None = None,
         timeout_sec: float = 60.0
     ) -> SearchResult:
         """Thực hiện giải tìm đường đi tới đích.

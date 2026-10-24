@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Tuple, Any, Optional, List, Dict
+from typing import Any
 
 STANDING = 0
 HORIZONTAL_X = 1
@@ -40,8 +40,8 @@ class StateKey:
         Trạng thái đóng (False) hoặc mở (True) của toàn bộ các ô cầu trên sàn.
     """
     is_split: bool
-    data: Tuple[Any, ...]
-    doors_state: Tuple[bool, ...]
+    data: tuple[Any, ...]
+    doors_state: tuple[bool, ...]
 
 
 class BloxorzState:
@@ -87,9 +87,9 @@ class BloxorzState:
         pos_type: int = STANDING,
         x: int = 0,
         y: int = 0,
-        doors_state: Tuple[bool, ...] = (),
+        doors_state: tuple[bool, ...] = (),
         is_split: bool = False,
-        blocks: Optional[List[Tuple[int, int]]] = None,
+        blocks: list[tuple[int, int]] | None = None,
         active_index: int = 0
     ):
         self.is_split = is_split
@@ -154,7 +154,7 @@ class BloxorzState:
             return False
         return self.to_key() == other.to_key()
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Xuất thông tin trạng thái thành định dạng từ điển phục vụ serialization.
 
         Returns
@@ -172,7 +172,7 @@ class BloxorzState:
             'doors_state': list(self.doors_state)
         }
 
-    def get_occupied_cells(self) -> List[Tuple[int, int]]:
+    def get_occupied_cells(self) -> list[tuple[int, int]]:
         """Lấy danh sách các tọa độ ô lưới (x, y) mà khối gạch đang đè lên.
 
         Returns
@@ -227,5 +227,5 @@ class SearchResult:
     memory_peak_kb: float
     expanded_nodes: int
     solution_length: int
-    actions: Tuple[str, ...] = ()
-    states_path: Tuple[Any, ...] = ()
+    actions: tuple[str, ...] = ()
+    states_path: tuple[Any, ...] = ()
