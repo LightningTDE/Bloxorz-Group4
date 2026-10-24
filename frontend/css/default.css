@@ -10,8 +10,8 @@
 	pointer-events: none;
 	overflow: hidden;
 	position: absolute;
-	left: 0px;
-	top: 0px;
+	left: 0;
+	top: 0;
 	display: none;
 	z-index: 2;
 }
@@ -124,7 +124,7 @@ td {
 
 body {
 	position: relative;
-	margin: 0px;
+	margin: 0;
 	background-color: black;
 	color: white;
 	height: 100vh;

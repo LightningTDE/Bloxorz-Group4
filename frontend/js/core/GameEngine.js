@@ -1,7 +1,5 @@
-import { GAME_EVENTS } from "./EventBus.js";
 import { GAME_STATES } from "./StateMachine.js";
-import { BLOCK_STATE, FALL_MAP } from "../utils/Constants.js";
-import { Isometric } from "../utils/Isometric.js";
+import { BLOCK_STATE } from "../utils/Constants.js";
 import { AnimationHelper } from "../utils/AnimationHelper.js";
 import { Board } from "../entities/Board.js";
 import { Block } from "../entities/Block.js";
@@ -333,7 +331,7 @@ export class GameEngine {
 
         // Nếu đang tạm dừng PauseMenu, đóng menu pause trước
         if (this._fsm.is(GAME_STATES.PAUSED)) {
-            this._pauseMenu.hide();
+            this._pauseMenu.close();
         }
 
         // Phát âm thanh phản hồi khi bấm restart
@@ -397,7 +395,7 @@ export class GameEngine {
         this._renderer.updateShadowMask(this._board.getTilesMap());
 
         // 5. Cập nhật HUD & phím ảo cảm ứng
-        const hasSplits = Array.isArray(this._currentLevelData.splits) && this._currentLevelData.splits.length > 0;
+        const hasSplits = Boolean(this._board && this._board.hasSplitSwitch);
         this._controls.setupForLevel(hasSplits);
 
         this._hud.initLevel({
@@ -443,6 +441,7 @@ export class GameEngine {
                 this._handleBlockStep(block, blockView, axis, change, nextPosition);
             }
         });
+        block.attachView(blockView);
 
         this._blocks = [block];
         this._blockViews = [blockView];
@@ -617,6 +616,9 @@ export class GameEngine {
                 onStepMove: (axis, change, nextPos) => this._handleBlockStep(b2, v2, axis, change, nextPos)
             });
 
+            b1.attachView(v1);
+            b2.attachView(v2);
+
             this._blocks = [b1, b2];
             this._blockViews = [v1, v2];
             this._input.setFocusIndex(0);
@@ -665,6 +667,8 @@ export class GameEngine {
             initialPosition: position,
             onStepMove: (axis, change, nextPos) => this._handleBlockStep(fullBlock, fullView, axis, change, nextPos)
         });
+
+        fullBlock.attachView(fullView);
 
         this._blocks = [fullBlock];
         this._blockViews = [fullView];
@@ -1048,7 +1052,7 @@ export class GameEngine {
             if (locked) {
                 this._controls.hide();
             } else {
-                const hasSplits = Array.isArray(this._currentLevelData && this._currentLevelData.splits) && this._currentLevelData.splits.length > 0;
+                const hasSplits = Boolean(this._board && this._board.hasSplitSwitch);
                 this._controls.setupForLevel(hasSplits);
                 if (this._blocks.length > 1) {
                     this._controls.showSplit();

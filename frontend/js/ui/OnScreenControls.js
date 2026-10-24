@@ -34,13 +34,6 @@ export class OnScreenControls {
         this._clip = options.clip || this._createDefaultClip();
 
         /**
-         * Dịch vụ Input để chuyển tiếp tín hiệu chạm nút ảo vào luồng xử lý phím.
-         * @private
-         * @type {import("../services/InputService.js").InputService|null}
-         */
-        this._inputService = options.inputService || null;
-
-        /**
          * Chế độ hiển thị hiện tại của phím ảo ("s" hoặc "ss").
          * @private
          * @type {string}
@@ -149,20 +142,26 @@ export class OnScreenControls {
     }
 
     /**
+     * @public
+     * @api
      * Kiểm tra xem cụm phím ảo có đang hiển thị trên màn hình hay không.
      * Tác dụng: Giúp kiểm soát trạng thái giao diện người dùng.
      *
      * @returns {boolean} True nếu phím ảo đang hiển thị.
      */
+    // noinspection JSUnusedGlobalSymbols
     isVisible() {
         return this._isVisible;
     }
 
     /**
+     * @public
+     * @api
      * Lấy chế độ hiển thị hiện tại của phím ảo ("s" hoặc "ss").
      *
      * @returns {string}
      */
+    // noinspection JSUnusedGlobalSymbols
     getCurrentMode() {
         return this._currentMode;
     }
@@ -181,6 +180,5 @@ export class OnScreenControls {
             }
         }
         this._clip = null;
-        this._inputService = null;
     }
 }

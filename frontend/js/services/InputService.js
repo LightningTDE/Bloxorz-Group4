@@ -175,12 +175,15 @@ export class InputService {
     }
 
     /**
+     * @public
+     * @api
      * Đăng ký hàm callback kích hoạt ngay khi nhận được tín hiệu di chuyển hợp lệ.
      * Tác dụng: Hỗ trợ mô hình kiến trúc hướng sự kiện (event-driven) để xử lý bước đi ngay lập tức.
      *
      * @param {(direction: string, focusIndex: number) => void} callback
      * @returns {void}
      */
+    // noinspection JSUnusedGlobalSymbols
     onDirection(callback) {
         this._onDirectionCallback = callback;
     }

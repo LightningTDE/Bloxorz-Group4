@@ -131,11 +131,14 @@ export class AudioService {
     }
 
     /**
+     * @public
+     * @api
      * Lấy trạng thái âm thanh hiện tại của hệ thống.
      * Tác dụng: Cung cấp thông tin để hiển thị biểu tượng âm thanh bật/tắt trên giao diện.
      *
      * @returns {boolean} True nếu âm thanh đang được bật, False nếu đang tắt.
      */
+    // noinspection JSUnusedGlobalSymbols
     isSoundEnabled() {
         return this._soundEnabled;
     }
@@ -248,6 +251,8 @@ export class AudioService {
     }
 
     /**
+     * @public
+     * @api
      * Phát hiệu ứng âm thanh khi khối hộp hoàn thành một bước lăn và tiếp đất lên mặt sàn.
      * Tác dụng: Phát ra tiếng gõ đá, tiếng va chạm kim loại hoặc tiếng rỗng tùy theo chất liệu sàn dưới chân khối.
      *
@@ -255,17 +260,21 @@ export class AudioService {
      * @param {number} variations - Số lượng biến thể âm thanh của chất liệu đó (3 hoặc 6).
      * @returns {createjs.AbstractSoundInstance|null}
      */
+    // noinspection JSUnusedGlobalSymbols
     playLanding(soundType, variations) {
         return this.play("clonk", soundType, variations);
     }
 
     /**
+     * @public
+     * @api
      * Phát âm thanh khi khối hộp lăn đè lên công tắc sàn.
      * Tác dụng: Tạo phản hồi âm thanh xác nhận công tắc đã được kích hoạt thành công (tiếng nhẹ hoặc tiếng nặng).
      *
      * @param {("small"|"big")} switchType - "small" cho công tắc nhẹ/phân thân, "big" cho công tắc nặng chữ X.
      * @returns {createjs.AbstractSoundInstance|null}
      */
+    // noinspection JSUnusedGlobalSymbols
     playSwitch(switchType) {
         const label = switchType === "big" ? "bigswitch" : "smallswitch";
         return this.play("clonk", label, 0);
