@@ -31,10 +31,10 @@ class SolverBenchmark:
         Bộ 4 nhóm màn chơi cố định phân theo độ khó tăng dần theo đề bài.
     """
     FIXED_GROUPS: Dict[str, List[int]] = {
-        "Group 1 (Simple cases)": [1, 2, 4],
-        "Group 2 (Fragile tiles)": [3, 6, 7],
-        "Group 3 (Switches & Bridges)": [5, 8, 10],
-        "Group 4 (Combined & Split)": [9, 11, 14]
+        "Group 1 (Basic)": [1, 3, 6],
+        "Group 2 (Fragile tiles)": [4, 13, 27],
+        "Group 3 (Switches & Bridges)": [2, 5, 18],
+        "Group 4 (Combined & Split)": [8, 10, 23],
     }
     def __init__(
         self,
