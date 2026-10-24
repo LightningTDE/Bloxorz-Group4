@@ -2,7 +2,7 @@ import time
 import tracemalloc
 from abc import abstractmethod
 from dataclasses import dataclass
-from typing import Tuple, Dict, Any, Optional, List
+from typing import Any
 from app.core.interfaces import IPathSolver, IGameEngine
 from app.core.models import BloxorzState, SearchResult
 from app.core.error_handler import BloxorzError, SearchTimeoutError, NoSolutionFoundError
@@ -50,8 +50,8 @@ class SearchOutcome:
     """
     is_solved: bool
     timed_out: bool
-    actions: Tuple[str, ...]
-    states_path: Tuple[Any, ...]
+    actions: tuple[str, ...]
+    states_path: tuple[Any, ...]
     total_cost: float
     expanded_nodes: int
     generated_nodes: int
@@ -88,7 +88,7 @@ class BaseSolver(IPathSolver):
 
         Parameters
         ----------
-        engine : IGameEngine
+        engine : BloxorzEngine
             Động cơ mô phỏng game Bloxorz cung cấp hàm get_successors và is_goal.
         start_state : BloxorzState
             Trạng thái bắt đầu tìm kiếm.
@@ -105,7 +105,7 @@ class BaseSolver(IPathSolver):
     def solve(
         self,
         engine: IGameEngine,
-        start_state: Optional[BloxorzState] = None,
+        start_state: BloxorzState | None = None,
         timeout_sec: float = 60.0
     ) -> SearchResult:
         """Thực thi quy trình giải tìm kiếm chuẩn: đo đạc thời gian, đỉnh RAM và truy vết.
@@ -205,9 +205,9 @@ class BaseSolver(IPathSolver):
 
     @staticmethod
     def _reconstruct_path(
-        parent_map: Dict[BloxorzState, Optional[Tuple[BloxorzState, str]]],
+        parent_map: dict[BloxorzState, tuple[BloxorzState, str] | None],
         goal_state: BloxorzState
-    ) -> Tuple[Tuple[str, ...], Tuple[BloxorzState, ...]]:
+    ) -> tuple[tuple[str, ...], tuple[BloxorzState, ...]]:
         """Truy vết ngược từ đích về trạng thái đầu để tái tạo chuỗi hành động và trạng thái.
 
         Parameters
@@ -222,8 +222,8 @@ class BaseSolver(IPathSolver):
         tuple of (tuple of str, tuple of BloxorzState)
             (actions, states_path) theo chiều thuận từ đầu tới đích.
         """
-        actions: List[str] = []
-        states_path: List[BloxorzState] = [goal_state]
+        actions: list[str] = []
+        states_path: list[BloxorzState] = [goal_state]
 
         current = goal_state
         while current in parent_map and parent_map[current] is not None:

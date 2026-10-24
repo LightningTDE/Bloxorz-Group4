@@ -1,5 +1,4 @@
 import uvicorn
-from typing import Dict
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.utils.config import config
@@ -31,7 +30,7 @@ register_error_handlers(app)
 app.include_router(api_v1_router, prefix="/api/v1")
 
 @app.get("/")
-async def root() -> Dict[str, str]:
+async def root() -> dict[str, str]:
     """Endpoint kiểm tra trạng thái hoạt động của hệ thống backend.
 
     Returns
@@ -46,5 +45,6 @@ async def root() -> Dict[str, str]:
     }
 
 if __name__ == "__main__":
+    # noinspection HttpUrlsUsage
     logger.info(f"Khởi động Bloxorz Backend tại http://{config.host}:{config.port}")
     uvicorn.run("main:app", host=config.host, port=config.port, reload=True)

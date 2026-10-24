@@ -1,11 +1,9 @@
 import time
 from collections import deque
-from typing import Dict, Optional, Tuple
 
 from app.pathfinder.base import BaseSolver, SearchOutcome
 from app.core.interfaces import IGameEngine
 from app.core.models import BloxorzState
-
 
 class BFSSolver(BaseSolver):
     """Thuat toan tim kiem theo chieu rong (Breadth-First Search).
@@ -66,7 +64,7 @@ class BFSSolver(BaseSolver):
         # Gan None cho start_state de _reconstruct_path nhan biet diem goc.
         # Cau truc nay dong thoi la da tham
         # ----------------------------------------------------------------
-        parent_map: Dict[BloxorzState, Optional[Tuple[BloxorzState, str]]] = {
+        parent_map: dict[BloxorzState, tuple[BloxorzState, str] | None] = {
             start_state: None
         }
         queue: deque = deque([start_state])

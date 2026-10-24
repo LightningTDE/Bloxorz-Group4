@@ -1,8 +1,8 @@
 import logging
 import sys
+from contextlib import suppress
 from pathlib import Path
 from logging.handlers import RotatingFileHandler
-from typing import Optional
 
 LOG_DIR = Path(__file__).resolve().parent.parent.parent / "logs"
 LOG_DIR.mkdir(exist_ok=True)
@@ -45,7 +45,7 @@ class ColoredFormatter(logging.Formatter):
         return super().format(record)
 
 
-def setup_logger(name: str = "bloxorz", log_level: Optional[int] = logging.INFO) -> logging.Logger:
+def setup_logger(name: str = "bloxorz", log_level: int | None = logging.INFO) -> logging.Logger:
     """Khởi tạo và cấu hình bộ ghi log (Logger) đa kênh cho hệ thống.
 
     Parameters
@@ -68,10 +68,8 @@ def setup_logger(name: str = "bloxorz", log_level: Optional[int] = logging.INFO)
 
     # 1. Console Output (Hỗ trợ UTF-8 an toàn trên console Windows)
     if hasattr(sys.stdout, "reconfigure"):
-        try:
+        with suppress(AttributeError, OSError):
             sys.stdout.reconfigure(encoding="utf-8", errors="replace")
-        except Exception:
-            pass
 
     console_handler = logging.StreamHandler(sys.stdout)
     console_handler.setLevel(log_level or logging.INFO)

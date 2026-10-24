@@ -1,16 +1,4 @@
-from typing import Optional, List
-try:
-    from pydantic import BaseModel, Field
-except ImportError:
-    class BaseModel:  # type: ignore
-        def __init__(self, **kwargs):
-            for k, v in kwargs.items():
-                setattr(self, k, v)
-
-    def Field(default=None, default_factory=None, **kwargs):  # type: ignore
-        if default_factory is not None:
-            return default_factory()
-        return default
+from pydantic import BaseModel, Field
 
 class CurrentStateSchema(BaseModel):
     """Mô hình dữ liệu mô tả trạng thái thực tế hiện tại của khối gạch từ người chơi.
@@ -35,9 +23,9 @@ class CurrentStateSchema(BaseModel):
     x: int = Field(..., description="Tọa độ x hiện tại của khối")
     y: int = Field(..., description="Tọa độ y hiện tại của khối")
     position: str = Field(default="up", description="Tư thế khối: 'up', 'long', 'far'")
-    doors_state: List[bool] = Field(default_factory=list, description="Trạng thái đóng/mở của các cây cầu")
+    doors_state: list[bool] = Field(default_factory=list, description="Trạng thái đóng/mở của các cây cầu")
     is_split: bool = Field(default=False, description="Khối có đang tách đôi hay không")
-    blocks: List[List[int]] = Field(default_factory=list, description="Tọa độ các khối nhỏ khi tách đôi")
+    blocks: list[list[int]] = Field(default_factory=list, description="Tọa độ các khối nhỏ khi tách đôi")
     active_index: int = Field(default=0, description="Chỉ số khối đang được điều khiển (0 hoặc 1)")
 
 
@@ -62,7 +50,7 @@ class SolveRequestSchema(BaseModel):
     algorithm: str = Field(default="A*", description="Thuật toán sử dụng: 'BFS', 'IDS', 'UCS', 'A*'")
     heuristic: str = Field(default="orientation_aware_manhattan", description="Hàm Heuristic cho A*")
     timeout_sec: float = Field(default=30.0, gt=0, le=120.0, description="Thời gian timeout (giây)")
-    current_state: Optional[CurrentStateSchema] = Field(
+    current_state: CurrentStateSchema | None = Field(
         default=None,
         description="Trạng thái hiện tại của khối gạch. Nếu None, giải từ vị trí xuất phát mặc định."
     )
@@ -94,6 +82,6 @@ class BenchmarkRequestSchema(BaseModel):
     timeout_sec : float, optional, default: 30.0
         Thời gian timeout tối đa cho mỗi thuật toán trên từng màn chơi.
     """
-    level_numbers: List[int] = Field(default_factory=lambda: [1, 2, 3, 5, 8], description="Danh sách các màn chơi cần đo kiểm")
-    algorithms: List[str] = Field(default_factory=lambda: ["BFS", "IDS", "UCS", "A*"], description="Danh sách các thuật toán tham gia")
+    level_numbers: list[int] = Field(default_factory=lambda: [1, 2, 3, 5, 8], description="Danh sách các màn chơi cần đo kiểm")
+    algorithms: list[str] = Field(default_factory=lambda: ["BFS", "IDS", "UCS", "A*"], description="Danh sách các thuật toán tham gia")
     timeout_sec: float = Field(default=30.0, gt=0, le=60.0, description="Thời gian timeout tối đa (giây)")

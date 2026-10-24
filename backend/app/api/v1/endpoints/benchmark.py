@@ -8,7 +8,6 @@ from app.utils.logger import setup_logger
 logger = setup_logger("api.benchmark")
 router = APIRouter()
 
-
 @router.post("/benchmark", response_model=BenchmarkResponseSchema)
 async def run_benchmark(request: BenchmarkRequestSchema):
     """API kích hoạt chạy thực nghiệm đo kiểm hiệu năng các thuật toán tìm kiếm.
