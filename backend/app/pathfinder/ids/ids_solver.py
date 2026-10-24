@@ -3,7 +3,6 @@
 import time
 from typing import Dict, List
 
-from app.core.error_handler import BloxorzError
 from app.core.interfaces import IGameEngine
 from app.core.models import BloxorzState
 from app.pathfinder.base import BaseSolver, SearchOutcome
@@ -23,7 +22,7 @@ class IDSSolver(BaseSolver):
     def __init__(self, max_depth: int = 100, measure_memory: bool = True):
         """Configure the maximum depth and the optional peak-memory measurement."""
         if not isinstance(max_depth, int) or isinstance(max_depth, bool) or max_depth <= 0:
-            raise BloxorzError("max_depth must be a positive integer.")
+            raise ValueError("max_depth must be a positive integer.")
         super().__init__(measure_memory=measure_memory)
         self.max_depth = max_depth
 
@@ -31,7 +30,7 @@ class IDSSolver(BaseSolver):
         self,
         engine: IGameEngine,
         start_state: BloxorzState,
-        deadline: float,
+        deadline: float
     ) -> SearchOutcome:
         """Run depth-limited DFS from depth 0 through ``max_depth``.
 
@@ -46,10 +45,10 @@ class IDSSolver(BaseSolver):
         # A state known to fail with k moves remaining also fails for <= k moves.
         failed_remaining: Dict[BloxorzState, int] = {}
 
-        def outcome(solved: bool, timed_out: bool = False) -> SearchOutcome:
+        def outcome(solved: bool, _timed_out: bool = False) -> SearchOutcome:
             return SearchOutcome(
                 is_solved=solved,
-                timed_out=timed_out,
+                timed_out=_timed_out,
                 actions=tuple(actions) if solved else (),
                 states_path=tuple(states) if solved else (),
                 total_cost=found_cost if solved else 0.0,
@@ -59,7 +58,7 @@ class IDSSolver(BaseSolver):
 
         for depth_limit in range(self.max_depth + 1):
             if time.perf_counter() >= deadline:
-                return outcome(solved=False, timed_out=True)
+                return outcome(solved=False, _timed_out=True)
 
             # IMPORTANT: reset at every limit; otherwise IDS loses completeness.
             best_depth: Dict[BloxorzState, int] = {start_state: 0}
@@ -121,7 +120,7 @@ class IDSSolver(BaseSolver):
             if dls(start_state, 0, 0.0):
                 return outcome(solved=True)
             if timed_out:
-                return outcome(solved=False, timed_out=True)
+                return outcome(solved=False, _timed_out=True)
             if not cutoff:
                 # The reachable state space was exhausted before the bound.
                 return outcome(solved=False)
