@@ -38,7 +38,7 @@ class SolveRequestSchema(BaseModel):
         Số thứ tự màn chơi (1 đến 33).
     algorithm : str, optional, default: "A*"
         Tên thuật toán tìm kiếm ("BFS", "IDS", "UCS", "A*").
-    heuristic : str, optional, default: "manhattan_div2"
+    heuristic : str, optional, default: "orientation_aware_manhattan"
         Tên hàm Heuristic sử dụng cho thuật toán A*.
     timeout_sec : float, optional, default: 30.0
         Thời gian timeout tối đa cho phép thuật toán chạy (giây).

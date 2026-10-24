@@ -12,7 +12,7 @@ class AStarSolver(BaseSolver):
     Parameters
     ----------
     heuristic : BaseHeuristic or str or None, optional, default: None
-        Hàm Heuristic dẫn đường (hoặc tên chuỗi của Heuristic). Mặc định là ManhattanDiv2Heuristic.
+        Hàm Heuristic dẫn đường (hoặc tên chuỗi của Heuristic). Mặc định là OrientationAwareManhattanHeuristic.
     measure_memory : bool, optional, default: True
         Cờ quyết định có đo đỉnh RAM hay không.
 

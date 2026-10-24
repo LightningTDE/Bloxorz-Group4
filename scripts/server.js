@@ -7,7 +7,6 @@
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
-const url = require('url');
 
 const PORT = parseInt(process.env.PORT, 10) || 3000;
 const HOST = process.env.HOST || '127.0.0.1';
@@ -44,7 +43,9 @@ const server = http.createServer((req, res) => {
         return;
     }
 
-    const parsedUrl = url.parse(req.url);
+    const reqHost = req.headers.host || `${HOST}:${PORT}`;
+    // noinspection HttpUrlsUsage
+    const parsedUrl = new URL(req.url, `http://${reqHost}`);
     let pathname = decodeURIComponent(parsedUrl.pathname);
 
     // 2. Health check endpoint cho start.ps1 kiểm tra trạng thái
@@ -110,7 +111,9 @@ const server = http.createServer((req, res) => {
 
 server.listen(PORT, HOST, () => {
     const timeStr = new Date().toLocaleTimeString('en-US', { hour12: false });
+    // noinspection HttpUrlsUsage
     console.log(`[${timeStr}] [NodeJS] Bloxorz Frontend Server dang chay tai http://${HOST}:${PORT}`);
+    // noinspection HttpUrlsUsage
     console.log(`[${timeStr}] [NodeJS] Duong dan game: http://${HOST}:${PORT}/frontend/index.html`);
 });
 

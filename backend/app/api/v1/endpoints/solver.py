@@ -147,7 +147,7 @@ async def get_hint(request: HintRequestSchema):
     engine = BloxorzEngine(level_dict)
     start_state = _build_start_state(engine, request.current_state)
 
-    # Dùng A* với Manhattan Heuristic để tìm bước đi nhanh nhất
+    # Dùng A* với Orientation Aware Manhattan Heuristic để tìm bước đi nhanh nhất
     solver = SolverFactory.create("A*", heuristic=OrientationAwareManhattanHeuristic(), measure_memory=False)
     result = solver.solve(engine, start_state=start_state, timeout_sec=15.0)
 
