@@ -1,7 +1,4 @@
-"""Iterative Deepening Search solver for the Bloxorz search interface."""
-
 import time
-from typing import Dict, List
 
 from app.core.interfaces import IGameEngine
 from app.core.models import BloxorzState
@@ -39,11 +36,11 @@ class IDSSolver(BaseSolver):
         """
         expanded_nodes = 0
         generated_nodes = 0
-        actions: List[str] = []
-        states: List[BloxorzState] = [start_state]
+        actions: list[str] = []
+        states: list[BloxorzState] = [start_state]
         found_cost = 0.0
         # A state known to fail with k moves remaining also fails for <= k moves.
-        failed_remaining: Dict[BloxorzState, int] = {}
+        failed_remaining: dict[BloxorzState, int] = {}
 
         def outcome(solved: bool, _timed_out: bool = False) -> SearchOutcome:
             return SearchOutcome(
@@ -61,7 +58,7 @@ class IDSSolver(BaseSolver):
                 return outcome(solved=False, _timed_out=True)
 
             # IMPORTANT: reset at every limit; otherwise IDS loses completeness.
-            best_depth: Dict[BloxorzState, int] = {start_state: 0}
+            best_depth: dict[BloxorzState, int] = {start_state: 0}
             cutoff = False
             timed_out = False
             actions.clear()
