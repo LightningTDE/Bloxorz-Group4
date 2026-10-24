@@ -30,6 +30,7 @@ export class Block {
             this.isSmall = Boolean(isSmall);
         }
 
+        // noinspection JSUnusedGlobalSymbols
         /**
          * Đối tượng hiển thị đồ họa gắn kèm (BlockView).
          * @type {import("./BlockView.js").BlockView|null}
@@ -58,6 +59,8 @@ export class Block {
     // =========================================================================
 
     /**
+     * @public
+     * @api
      * Lấy danh sách tọa độ các ô sàn mà khối hộp đang chiếm giữ trên mặt bàn cờ.
      * Tác dụng: Xác định các điểm tiếp xúc vật lý để kiểm tra va chạm, sàn giòn vỡ hoặc kích hoạt công tắc:
      * - Tư thế đứng UP hoặc khối nhỏ 1x1: Chiếm đúng 1 ô duy nhất [x, y].
@@ -66,6 +69,7 @@ export class Block {
      *
      * @returns {Array<{x: number, y: number}>} Mảng tọa độ các ô sàn tiếp xúc.
      */
+    // noinspection JSUnusedGlobalSymbols
     getOccupiedTiles() {
         if (this.isSmall || this.state === BLOCK_STATE.UP) {
             return [{ x: this.x, y: this.y }];
@@ -90,6 +94,8 @@ export class Block {
     // =========================================================================
 
     /**
+     * @public
+     * @api
      * Áp dụng bước di chuyển logic sau khi hoạt cảnh lăn tiếp đất hoàn tất.
      * Tác dụng: Đồng bộ hóa tọa độ ma trận và tư thế mới của khối hộp sau mỗi bước lăn thành công.
      *
@@ -98,6 +104,7 @@ export class Block {
      * @param {string} nextState - Tư thế mới của khối ('up', 'long', hoặc 'far').
      * @returns {void}
      */
+    //noinspection JSUnusedGlobalSymbols
     applyRollStep(axis, change, nextState) {
         if (axis === "x") {
             this.x += change;
@@ -112,6 +119,8 @@ export class Block {
     // =========================================================================
 
     /**
+     * @public
+     * @api
      * Xác định hướng ngã rơi khi khối có một hoặc cả hai chân tiếp xúc ngoài mép sàn.
      * Tác dụng: Tra cứu bảng FALL_MAP để chọn hoạt ảnh ngã lật tự nhiên nhất theo trọng tâm hình học:
      * - Cả hai chân đều nằm trên sàn hợp lệ -> Trả về null (khối an toàn).
@@ -123,6 +132,7 @@ export class Block {
      * @param {string} rollDirection - Hướng vừa lăn tới của khối ('up', 'down', 'left', 'right').
      * @returns {string|null} Hướng ngã rơi ("up", "down", "left", "right") hoặc null nếu khối đứng an toàn.
      */
+    // noinspection JSUnusedGlobalSymbols
     checkFallDirection(isFoot1OnLand, isFoot2OnLand, rollDirection) {
         const bit1 = isFoot1OnLand ? "1" : "0";
         const bit2 = isFoot2OnLand ? "1" : "0";

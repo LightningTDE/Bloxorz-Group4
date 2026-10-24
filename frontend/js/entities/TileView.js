@@ -7,7 +7,7 @@
 
 import { Isometric } from "../utils/Isometric.js";
 import { AnimationHelper } from "../utils/AnimationHelper.js";
-import { TILE_TYPES, INITIAL_DOOR_STATES } from "../utils/Constants.js";
+import { INITIAL_DOOR_STATES } from "../utils/Constants.js";
 
 export class TileView {
     /**
@@ -32,18 +32,6 @@ export class TileView {
          * @type {string}
          */
         this.type = type;
-
-        /**
-         * Tọa độ cột trên lưới.
-         * @type {number}
-         */
-        this.gridX = gridX;
-
-        /**
-         * Tọa độ hàng trên lưới.
-         * @type {number}
-         */
-        this.gridY = gridY;
 
         // 1. Cài đặt hệ thống tọa độ pixel động (pos) cho ô sàn
         this._setupPosition(gridX, gridY);

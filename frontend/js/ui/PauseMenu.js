@@ -152,11 +152,14 @@ export class PauseMenu {
     }
 
     /**
+     * @public
+     * @api
      * Kiểm tra xem PauseMenu hiện có đang ở trạng thái mở trên màn hình hay không.
      * Tác dụng: Giúp GameEngine xác định trạng thái tạm dừng của trò chơi.
      *
      * @returns {boolean} True nếu menu đang mở (currentFrame khác 0).
      */
+    // noinspection JSUnusedGlobalSymbols
     isOpen() {
         if (!this._clip) return false;
         return this._clip.currentFrame !== PauseMenu.FRAMES.CLOSED;
@@ -189,11 +192,22 @@ export class PauseMenu {
     }
 
     /**
+     * Bí danh (alias) của close() để tương thích giao diện gọi hàm hide().
+     * @returns {void}
+     */
+    hide() {
+        this.close();
+    }
+
+    /**
+     * @public
+     * @api
      * Chuyển đổi trạng thái giữa Mở và Đóng của PauseMenu.
      * Tác dụng: Cho phép bật/tắt nhanh menu chỉ bằng một lệnh duy nhất.
      *
      * @returns {void}
      */
+    // noinspection JSUnusedGlobalSymbols
     toggle() {
         if (!this._clip) return;
         this._clip.play();

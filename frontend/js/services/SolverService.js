@@ -30,10 +30,13 @@ export class SolverService {
     }
 
     /**
+     * @public
+     * @api
      * Gắn kết GameEngine vào dịch vụ sau khi engine được khởi tạo.
      * @param {Object} engine
      * @returns {void}
      */
+    // noinspection JSUnusedGlobalSymbols
     attachEngine(engine) {
         this.engine = engine;
     }

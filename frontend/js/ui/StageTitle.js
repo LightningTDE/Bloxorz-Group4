@@ -158,7 +158,6 @@ export class StageTitle {
             } else {
                 this._clip.alpha = 0;
                 finish();
-                return;
             }
         };
         createjs.Ticker.addEventListener("tick", this._activeTick);
