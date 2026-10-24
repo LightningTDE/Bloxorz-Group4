@@ -385,42 +385,4 @@ export class BlockView {
             }
         }
     }
-
-    // =========================================================================
-    // 5. QUẢN LÝ PHÂN TẦNG ĐỒ HỌA TRÊN STAGE (LAYER MANAGEMENT)
-    // =========================================================================
-
-    /**
-     * Thêm khối hộp và bóng đổ vào đúng các container phân tầng trên Stage.
-     * Tác dụng: Đảm bảo bóng đổ luôn nằm ở layer bóng (phía dưới) và khối hộp nằm ở layer vật thể (phía trên).
-     *
-     * @param {createjs.Container} layerBlocks - Container chứa các khối hộp.
-     * @param {createjs.Container} layerShadows - Container chứa bóng đổ.
-     * @returns {void}
-     */
-    addToLayers(layerBlocks, layerShadows) {
-        if (layerShadows && this.shadowClip) {
-            layerShadows.addChild(this.shadowClip);
-        }
-        if (layerBlocks && this.blockClip) {
-            layerBlocks.addChild(this.blockClip);
-        }
-    }
-
-    /**
-     * Gỡ bỏ khối hộp và bóng đổ khỏi các container phân tầng.
-     * Tác dụng: Xóa sạch đồ họa của khối khi reset màn chơi hoặc chuyển màn.
-     *
-     * @param {createjs.Container} layerBlocks - Container chứa các khối hộp.
-     * @param {createjs.Container} layerShadows - Container chứa bóng đổ.
-     * @returns {void}
-     */
-    removeFromLayers(layerBlocks, layerShadows) {
-        if (layerShadows && this.shadowClip) {
-            layerShadows.removeChild(this.shadowClip);
-        }
-        if (layerBlocks && this.blockClip) {
-            layerBlocks.removeChild(this.blockClip);
-        }
-    }
 }

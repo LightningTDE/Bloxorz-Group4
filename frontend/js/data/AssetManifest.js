@@ -1,3 +1,9 @@
+// noinspection JSUnusedGlobalSymbols
+/**
+ * @public
+ * @readonly
+ * Cấu hình chuẩn khung nhìn Canvas của Adobe Animate.
+ */
 export const CANVAS_CONFIG = {
     COMPOSITION_ID: "FE31B685947E79408F0C8768D6EC8517",
     WIDTH: 550,
@@ -50,6 +56,8 @@ export class AssetManifest {
      * Tạo mảng Manifest hoàn chỉnh cho createjs.LoadQueue
      * @param {string} theme - Theme đã chọn
      * @param {Object} paths - Đường dẫn tùy biến tới folder resources
+     * @param {string} [paths.assets] - Đường dẫn tới thư mục assets (tùy chọn)
+     * @param {string} [paths.sounds] - Đường dẫn tới thư mục sounds (tùy chọn)
      * @returns {Array<{src: string, id: string}>}
      */
     static createManifest(theme = THEMES.ORIGINAL, paths = {}) {

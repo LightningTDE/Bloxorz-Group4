@@ -5,8 +5,6 @@
  * ngăn chặn các bước nhảy trạng thái phi logic và thực thi vòng đời (lifecycle hooks onEnter/onExit).
  */
 
-import { GAME_EVENTS } from "./EventBus.js";
-
 /**
  * Danh mục toàn bộ các trạng thái khả dụng trong trò chơi.
  * Tác dụng: Định danh các pha hoạt động độc lập của luồng game.
@@ -119,21 +117,27 @@ export class StateMachine {
     }
 
     /**
+     * @public
+     * @api
      * Lấy trạng thái hiện tại của trò chơi.
      * Tác dụng: Cung cấp thông tin trạng thái cho các hệ thống hiển thị và điều khiển.
      *
      * @returns {string} Trạng thái hiện tại (hằng số từ GAME_STATES).
      */
+    // noinspection JSUnusedGlobalSymbols
     getState() {
         return this._currentState;
     }
 
     /**
+     * @public
+     * @api
      * Lấy trạng thái liền trước của trò chơi.
      * Tác dụng: Cho phép quay trở lại trạng thái cũ (ví dụ: từ PAUSED quay lại PLAYING).
      *
      * @returns {string|null} Trạng thái trước đó hoặc null nếu chưa có chuyển đổi.
      */
+    // noinspection JSUnusedGlobalSymbols
     getPreviousState() {
         return this._previousState;
     }
@@ -150,11 +154,14 @@ export class StateMachine {
     }
 
     /**
+     * @public
+     * @api
      * Kiểm tra nhanh xem trò chơi có đang trong pha tương tác bàn cờ (không ở Menu hay Hướng dẫn) hay không.
      * Tác dụng: Bật/tắt các bộ lắng nghe bàn phím điều khiển khối hộp.
      *
      * @returns {boolean} True nếu đang ở một trong các trạng thái PLAYING, PAUSED, LEVEL_WIN, LEVEL_LOSE.
      */
+    // noinspection JSUnusedGlobalSymbols
     isInGameplay() {
         return (
             this._currentState === GAME_STATES.PLAYING ||
@@ -242,6 +249,8 @@ export class StateMachine {
     }
 
     /**
+     * @public
+     * @api
      * Đăng ký hàm thực thi khi trò chơi bước vào một trạng thái cụ thể.
      * Tác dụng: Cho phép các module khởi tạo giao diện hoặc tài nguyên khi trạng thái được kích hoạt.
      *
@@ -249,6 +258,7 @@ export class StateMachine {
      * @param {Function} callback - Hàm thực thi nhận tham số { from, to, payload }.
      * @returns {() => void} Hàm tiện ích để hủy đăng ký hook.
      */
+    // noinspection JSUnusedGlobalSymbols
     onEnter(state, callback) {
         if (!this._enterHooks.has(state)) {
             this._enterHooks.set(state, new Set());
@@ -262,6 +272,8 @@ export class StateMachine {
     }
 
     /**
+     * @public
+     * @api
      * Đăng ký hàm thực thi khi trò chơi rời khỏi một trạng thái cụ thể.
      * Tác dụng: Cho phép các module dọn dẹp bộ nhớ hoặc ẩn các bảng điều khiển khi rời trạng thái.
      *
@@ -269,6 +281,7 @@ export class StateMachine {
      * @param {Function} callback - Hàm thực thi nhận tham số { from, to, payload }.
      * @returns {() => void} Hàm tiện ích để hủy đăng ký hook.
      */
+    // noinspection JSUnusedGlobalSymbols
     onExit(state, callback) {
         if (!this._exitHooks.has(state)) {
             this._exitHooks.set(state, new Set());
@@ -282,12 +295,15 @@ export class StateMachine {
     }
 
     /**
+     * @public
+     * @api
      * Đặt lại trạng thái trò chơi về mặc định (MENU).
      * Tác dụng: Phục vụ khi khởi động lại toàn bộ game hoặc quay về màn hình chính.
      *
      * @param {string} [defaultState=GAME_STATES.MENU] - Trạng thái mặc định.
      * @returns {void}
      */
+    // noinspection JSUnusedGlobalSymbols
     reset(defaultState = GAME_STATES.MENU) {
         this._currentState = defaultState;
         this._previousState = null;

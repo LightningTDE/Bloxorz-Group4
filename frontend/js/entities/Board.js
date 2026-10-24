@@ -150,6 +150,8 @@ export class Board {
     }
 
     /**
+     * @public
+     * @api
      * Kiểm tra xem ô sàn tại tọa độ (x, y) có cho phép khối hộp đứng lên an toàn hay không.
      * Tác dụng: Phục vụ kiểm tra va chạm bước đi, nhận diện vực thẳm hoặc ô cam bị vỡ.
      *
@@ -159,6 +161,7 @@ export class Board {
      * @param {boolean} isSmall - True nếu là khối nhỏ 1x1.
      * @returns {boolean|string} True nếu đi được, False nếu vực thẳm/cầu đóng, "square" nếu ô cam vỡ.
      */
+    // noinspection JSUnusedGlobalSymbols
     checkTileWalkable(x, y, blockPosition, isSmall) {
         const tile = this.getTileAt(x, y);
         if (!tile) {
@@ -313,6 +316,7 @@ export class Board {
         let tile2 = null;
 
         const land1 = tile1 ? tile1.checkWalkable(pos, isSmall) : false;
+        /** @type {string|boolean} */
         let land2 = false;
 
         // Nếu chân 1 đứng trên ô cam giòn ở tư thế UP -> ô bị sập vỡ
@@ -352,9 +356,9 @@ export class Board {
 
         const win = Boolean((res1 && res1.triggerWin) || (res2 && res2.triggerWin));
         const split = Boolean((res1 && res1.triggerSplit) || (res2 && res2.triggerSplit));
-        const linkedSplits = (res1 && res1.triggerSplit ? tile1.linkedSplits : null) || (res2 && res2.triggerSplit ? tile2.linkedSplits : null);
+        const linkedSplits = (res1 && res1.triggerSplit ? tile1.linkedSplits : null) || (res2 && res2.triggerSplit ? tile2?.linkedSplits : null);
         const switchDoors = Boolean((res1 && res1.triggerSwitch) || (res2 && res2.triggerSwitch));
-        const linkedDoors = (res1 && res1.triggerSwitch ? tile1.linkedDoors : null) || (res2 && res2.triggerSwitch ? tile2.linkedDoors : null);
+        const linkedDoors = (res1 && res1.triggerSwitch ? tile1.linkedDoors : null) || (res2 && res2.triggerSwitch ? tile2?.linkedDoors : null);
 
         let chosenSound = (res1 && res1.sound) || (res2 && res2.sound) || {
             name: "clonk",

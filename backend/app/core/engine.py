@@ -361,6 +361,16 @@ class BloxorzEngine(IGameEngine):
         final_state = BloxorzState(next_p, next_x, next_y, new_doors, is_split=False)
         return final_state, 'active', 'Hợp lệ'
 
+    def is_touching_fragile(self, state: BloxorzState) -> bool:
+        "Kiểm tra xem khối có đang đứng trên ô dễ vỡ hay không, phục vụ tính cost cho UCS Solver"
+        
+        cells_occupied = state.get_occupied_cells()
+        for cell in cells_occupied:
+            x, y = cell[0], cell[1]
+            if self.grid[y][x] == 'f':
+                return True
+        return False
+
     def is_goal(self, state: Optional[BloxorzState]) -> bool:
         """Kiểm tra khối gạch đã đứng thẳng an toàn vào ô hố đích 'e' hay chưa.
 
