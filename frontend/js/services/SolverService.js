@@ -30,10 +30,13 @@ export class SolverService {
     }
 
     /**
+     * @public
+     * @api
      * Gắn kết GameEngine vào dịch vụ sau khi engine được khởi tạo.
      * @param {Object} engine
      * @returns {void}
      */
+    // noinspection JSUnusedGlobalSymbols
     attachEngine(engine) {
         this.engine = engine;
     }
@@ -55,7 +58,7 @@ export class SolverService {
      *
      * @param {Object} [params]
      * @param {string} [params.algorithm="A*"] - Thuật toán ("A*", "BFS", "IDS", "UCS").
-     * @param {string} [params.heuristic="manhattan_div2"] - Hàm heuristic ("manhattan_div2", "orientation_aware", "relaxed_point").
+     * @param {string} [params.heuristic="orientation_aware_manhattan"] - Hàm heuristic ("orientation_aware_manhattan").
      * @returns {Promise<boolean>} True nếu tìm thấy và bắt đầu thực thi lời giải.
      */
     async startSolve(params = {}) {
@@ -70,7 +73,7 @@ export class SolverService {
         }
 
         const algorithm = params.algorithm || "A*";
-        const heuristic = params.heuristic || "manhattan_div2";
+        const heuristic = params.heuristic || "orientation_aware_manhattan";
         const levelNumber = this.engine.getCurrentLevelNumber();
         const currentState = this.engine.getCurrentState();
 

@@ -1,5 +1,6 @@
 import io
 import csv
+from typing import List, Dict, Any, Optional
 from app.pathfinder.base import BaseSolver
 from app.pathfinder.factory import SolverFactory
 from app.core.interfaces import IGameEngine
@@ -29,15 +30,15 @@ class SolverBenchmark:
     FIXED_GROUPS : dict of {str: list of int}
         Bộ 4 nhóm màn chơi cố định phân theo độ khó tăng dần theo đề bài.
     """
-    FIXED_GROUPS: dict[str, list[int]] = {
-        "Group 1 (Simple cases)": [1, 2, 4],
-        "Group 2 (Fragile tiles)": [3, 6, 7],
-        "Group 3 (Switches & Bridges)": [5, 8, 10],
-        "Group 4 (Combined & Split)": [9, 11, 14]
+    FIXED_GROUPS: Dict[str, List[int]] = {
+        "Group 1 (Basic)": [1, 3, 6],
+        "Group 2 (Fragile tiles)": [4, 13, 27],
+        "Group 3 (Switches & Bridges)": [2, 5, 18],
+        "Group 4 (Combined & Split)": [8, 10, 23],
     }
     def __init__(
         self,
-        solvers: list[BaseSolver] | None = None,
+        solvers: Optional[List[BaseSolver]] = None,
         timeout_sec: float = 60.0
     ):
         self.solvers = solvers or SolverFactory.create_all(measure_memory=True)
@@ -46,8 +47,8 @@ class SolverBenchmark:
     def run_level(
         self,
         engine: IGameEngine,
-        start_state: BloxorzState = None
-    ) -> list[SearchResult]:
+        start_state: Optional[BloxorzState] = None
+    ) -> List[SearchResult]:
         """Chạy toàn bộ các thuật toán trên một màn chơi và thu thập chỉ số đo lường.
 
         Parameters
@@ -62,7 +63,7 @@ class SolverBenchmark:
         list of SearchResult
             Danh sách kết quả đo đạc từ các thuật toán.
         """
-        results: list[SearchResult] = []
+        results: List[SearchResult] = []
         level_num = getattr(engine, "level_number", 1)
 
         logger.info(f"--- Bắt đầu đo kiểm Level {level_num} ---")
@@ -78,7 +79,7 @@ class SolverBenchmark:
 
         return results
 
-    def run_suite(self, levels: list[int] | None = None) -> dict[int, list[SearchResult]]:
+    def run_suite(self, levels: Optional[List[int]] = None) -> Dict[int, List[SearchResult]]:
         """Chạy thực nghiệm trên một tập hợp danh sách các màn chơi định sẵn.
 
         Parameters
@@ -97,7 +98,7 @@ class SolverBenchmark:
             for grp_levels in self.FIXED_GROUPS.values():
                 levels.extend(grp_levels)
 
-        suite_results: dict[int, list[SearchResult]] = {}
+        suite_results: Dict[int, List[SearchResult]] = {}
         for lvl in levels:
             try:
                 level_dict = level_loader.load_level(lvl)
@@ -109,7 +110,7 @@ class SolverBenchmark:
         return suite_results
 
     @staticmethod
-    def export_to_csv(suite_results: dict[int, list[SearchResult]]) -> str:
+    def export_to_csv(suite_results: Dict[int, List[SearchResult]]) -> str:
         """Xuất toàn bộ kết quả đo kiểm ra định dạng CSV chuẩn để lập bảng trong báo cáo.
 
         Parameters
@@ -151,7 +152,7 @@ class SolverBenchmark:
         return output.getvalue()
 
     @staticmethod
-    def export_to_markdown_table(suite_results: dict[int, list[SearchResult]]) -> str:
+    def export_to_markdown_table(suite_results: Dict[int, List[SearchResult]]) -> str:
         """Xuất bảng tổng hợp Markdown để dán trực tiếp vào file báo cáo.
 
         Parameters

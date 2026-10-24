@@ -369,7 +369,7 @@ export class Renderer {
 
             return {
                 item: item,
-                depth: item.pos.y - item.pos.x + (item.depthNudge || 0)
+                depth: Isometric.getDepth(item.pos.x, item.pos.y, item.depthNudge || 0)
             };
         });
 
@@ -408,37 +408,17 @@ export class Renderer {
             this._layerBlocks.removeChild(blockClip);
         }
 
-        // Bảng độ lệch tọa độ ảo khi khối ngã lật theo hướng và tư thế
-        const depthNudgeMap = {
-            upup: [0, 0],
-            upfar: [0, -1],
-            uplong: [0, 0],
-            downup: [0, 1],
-            downfar: [0, 0],
-            downlong: [0, 0],
-            leftup: [-1, 0],
-            leftfar: [-1, 0],
-            leftlong: [-1, 0],
-            rightup: [0, 0],
-            rightfar: [0, 0],
-            rightlong: [0, 0]
-        };
-
-        let targetX = pos.x;
-        let targetY = pos.y;
-
-        const nudgeKey = `${direction}${position}`;
-        if (depthNudgeMap[nudgeKey]) {
-            targetX += depthNudgeMap[nudgeKey][0];
-            targetY += depthNudgeMap[nudgeKey][1];
-        }
+        // Tính toán độ lệch tọa độ ảo khi khối ngã lật theo hướng và tư thế từ Isometric helper
+        const [nudgeX, nudgeY] = Isometric.getFallDepthNudge(direction, position);
+        const targetX = pos.x + nudgeX;
+        const targetY = pos.y + nudgeY;
 
         // Tách sàn gạch thành hai nhóm: Nhóm nằm phía sau khối và Nhóm nằm phía trước khối
         const tilesBehind = [];
         const tilesInfront = [];
 
         tiles.forEach((item) => {
-            const isBehind = item.pos.y <= targetY && item.pos.x >= targetX;
+            const isBehind = Isometric.isTileBehindBlock(item.pos.x, item.pos.y, targetX, targetY);
             if (isBehind) {
                 tilesBehind.push(item.tileClip);
             } else {

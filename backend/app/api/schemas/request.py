@@ -48,7 +48,7 @@ class SolveRequestSchema(BaseModel):
     """
     level_number: int = Field(..., ge=1, le=33, description="Số thứ tự màn chơi (1..33)")
     algorithm: str = Field(default="A*", description="Thuật toán sử dụng: 'BFS', 'IDS', 'UCS', 'A*'")
-    heuristic: str = Field(default="manhattan_div2", description="Hàm Heuristic cho A*")
+    heuristic: str = Field(default="orientation_aware_manhattan", description="Hàm Heuristic cho A*")
     timeout_sec: float = Field(default=30.0, gt=0, le=120.0, description="Thời gian timeout (giây)")
     current_state: CurrentStateSchema | None = Field(
         default=None,

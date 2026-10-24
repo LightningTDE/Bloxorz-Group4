@@ -121,9 +121,12 @@ export class MainMenu {
         // 1. Kiểm tra tiến trình lưu để bật/tắt nút Resume
         this.updateResumeState();
 
-        // 2. Vô hiệu hóa các phương thức can thiệp DOM cũ để tránh làm sai lệch layout ô nhập Passcode
+        // 2. Vô hiệu hóa các phương thức can thiệp DOM tự động của an_TextInput
+        // Ngăn chặn Adobe Animate tính toán lại CSS Transform làm ô nhập Passcode bị co giãn, nhảy vị trí hoặc mất hiển thị.
         if (typeof window !== "undefined" && window.lib && window.lib.an_TextInput) {
+            // noinspection JSUnusedGlobalSymbols
             window.lib.an_TextInput.prototype._handleDrawEnd = function () {};
+            // noinspection JSUnusedGlobalSymbols
             window.lib.an_TextInput.prototype._updateVisibility = function () {};
         }
         if (this._clip && this._clip.loadLevelTextInput) {
@@ -330,7 +333,9 @@ export class MainMenu {
 
         // Vô hiệu hóa legacy draw handler để anwidget không can thiệp làm sai lệch layout
         if (typeof window !== "undefined" && window.lib && window.lib.an_TextInput) {
+            // noinspection JSUnusedGlobalSymbols
             window.lib.an_TextInput.prototype._handleDrawEnd = function () {};
+            // noinspection JSUnusedGlobalSymbols
             window.lib.an_TextInput.prototype._updateVisibility = function () {};
         }
         if (this._clip && this._clip.loadLevelTextInput) {

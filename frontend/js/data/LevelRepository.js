@@ -115,6 +115,8 @@ export class LevelRepository {
     }
 
     /**
+     * @public
+     * @api
      * Nạp toàn bộ dữ liệu cấu hình màn chơi dựa vào chuỗi mã passcode.
      * Tác dụng: Phục vụ chuyển thẳng vào màn chơi tương ứng khi người chơi nhập passcode thành công.
      *
@@ -132,6 +134,8 @@ export class LevelRepository {
     }
 
     /**
+     * @public
+     * @api
      * Lấy toàn bộ danh sách mã passcode của 33 màn chơi.
      * Tác dụng: Phục vụ kiểm tra toàn diện hoặc hỗ trợ các công cụ kiểm thử tự động.
      *
@@ -169,6 +173,7 @@ export class LevelRepository {
      * @param {string} code
      * @returns {Promise<Object|null>}
      */
+    // noinspection JSUnusedGlobalSymbols
     async getLevelByCode(code) {
         return LevelRepository.getLevelByCode(code);
     }
@@ -177,6 +182,7 @@ export class LevelRepository {
      * Phương thức thể hiện gọi getAllCodes.
      * @returns {Promise<string[]>}
      */
+    // noinspection JSUnusedGlobalSymbols
     async getAllCodes() {
         return LevelRepository.getAllCodes();
     }

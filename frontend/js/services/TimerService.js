@@ -293,22 +293,28 @@ export class TimerService {
     }
 
     /**
+     * @public
+     * @api
      * Lấy thời gian đã trôi qua của riêng màn chơi hiện tại tính bằng mili-giây.
      * Tác dụng: Đo thời gian người chơi giải đố màn chơi đang diễn ra.
      *
      * @returns {number} Thời gian màn chơi hiện tại (ms).
      */
+    // noinspection JSUnusedGlobalSymbols
     getCurrentStageElapsedMs() {
         if (!this._isActive) return 0;
         return Date.now() - this._stageStartTime;
     }
 
     /**
+     * @public
+     * @api
      * Kiểm tra xem đồng hồ đếm giờ có đang ở trạng thái hoạt động hay không.
      * Tác dụng: Xác định trạng thái của game để đồng bộ hóa với hệ thống quản lý trạng thái.
      *
      * @returns {boolean} True nếu đồng hồ đang chạy.
      */
+    // noinspection JSUnusedGlobalSymbols
     isActive() {
         return this._isActive;
     }

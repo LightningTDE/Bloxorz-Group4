@@ -5,7 +5,10 @@
  * giảm thiểu sự phụ thuộc lẫn nhau (decoupling) và dễ dàng mở rộng.
  */
 
+// noinspection JSUnusedGlobalSymbols
 /**
+ * @public
+ * @api
  * Danh mục toàn bộ các sự kiện chuẩn hóa trong trò chơi.
  * Tác dụng: Cung cấp hằng số định danh duy nhất cho các sự kiện của khối hộp, bàn cờ, tiến trình và giao diện.
  * @readonly
@@ -81,6 +84,8 @@ export class EventBus {
     }
 
     /**
+     * @public
+     * @api
      * Đăng ký lắng nghe sự kiện một lần duy nhất (tự động hủy đăng ký ngay sau khi thực thi lần đầu).
      * Tác dụng: Phù hợp cho các sự kiện chỉ xảy ra một lần như khởi tạo màn chơi hoặc kết thúc game.
      *
@@ -89,6 +94,7 @@ export class EventBus {
      * @param {Object} [context=null] - Ngữ cảnh `this`.
      * @returns {() => void}
      */
+    // noinspection JSUnusedGlobalSymbols
     once(eventName, callback, context = null) {
         if (typeof callback !== "function") {
             throw new TypeError(`[EventBus] Callback của sự kiện "${eventName}" phải là một Function.`);
@@ -166,12 +172,15 @@ export class EventBus {
     }
 
     /**
+     * @public
+     * @api
      * Kiểm tra xem một sự kiện có bất kỳ listener nào đang theo dõi hay không.
      * Tác dụng: Giúp tối ưu hóa việc chuẩn bị dữ liệu chỉ khi thực sự có thành phần cần xử lý.
      *
      * @param {string} eventName - Tên sự kiện cần kiểm tra.
      * @returns {boolean} True nếu có ít nhất một listener đang đăng ký.
      */
+    // noinspection JSUnusedGlobalSymbols
     has(eventName) {
         const subs = this._listeners.get(eventName);
         return Boolean(subs && subs.size > 0);
@@ -181,7 +190,7 @@ export class EventBus {
      * Xóa sạch toàn bộ listeners của một sự kiện cụ thể hoặc của tất cả các sự kiện.
      * Tác dụng: Làm mới hoàn toàn hệ thống sự kiện khi tải lại ứng dụng hoặc dọn dẹp game.
      *
-     * @param {string} [eventName=null] - Tên sự kiện cần xóa, hoặc null để xóa toàn bộ.
+     * @param {string|null} [eventName=null] - Tên sự kiện cần xóa, hoặc null để xóa toàn bộ.
      * @returns {void}
      */
     clear(eventName = null) {

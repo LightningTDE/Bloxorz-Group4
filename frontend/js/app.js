@@ -53,9 +53,12 @@ class App {
 
         // Vô hiệu hóa _handleDrawEnd legacy của Adobe Animate can thiệp làm co giãn/nhảy ô nhập Passcode
         if (typeof window !== "undefined" && window.lib && window.lib.an_TextInput) {
+            // noinspection JSUnusedGlobalSymbols
             window.lib.an_TextInput.prototype._handleDrawEnd = function () {};
+            // noinspection JSUnusedGlobalSymbols
             window.lib.an_TextInput.prototype._updateVisibility = function () {};
         }
+        // noinspection JSUnusedGlobalSymbols
         stage.localSave = {
             get: () => {
                 try {
@@ -73,6 +76,7 @@ class App {
         };
         stage.levelCodes = LevelRepository.LEVEL_CODES;
         window.getLevelCodes = () => LevelRepository.LEVEL_CODES;
+        // noinspection JSUnusedGlobalSymbols
         stage.soundSave = {
             get: () => true,
             save: () => {}
@@ -354,7 +358,7 @@ class App {
         if (btnSolve) {
             btnSolve.addEventListener("click", async () => {
                 const algo = algoSelect ? algoSelect.value : "A*";
-                const heur = heuristicSelect ? heuristicSelect.value : "manhattan_div2";
+                const heur = heuristicSelect ? heuristicSelect.value : "orientation_aware_manhattan";
                 await solver.startSolve({ algorithm: algo, heuristic: heur });
             });
         }

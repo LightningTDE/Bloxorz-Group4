@@ -44,13 +44,6 @@ export class VictoryModal {
         this._audioService = options.audioService || null;
 
         /**
-         * Dịch vụ lưu trữ.
-         * @private
-         * @type {import("../services/StorageService.js").StorageService|null}
-         */
-        this._storageService = options.storageService || null;
-
-        /**
          * Dữ liệu thống kê tổng kết lần chơi hoàn thành 33 màn.
          * @private
          * @type {{ totalMoves: number, totalFalls: number, timeTakenMs: number, digits: number[]|null }}
@@ -260,7 +253,6 @@ export class VictoryModal {
 
         this._clip = null;
         this._audioService = null;
-        this._storageService = null;
         this._onReturnCallback = null;
     }
 }

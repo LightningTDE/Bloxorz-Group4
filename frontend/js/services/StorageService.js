@@ -162,11 +162,14 @@ export class StorageService {
     }
 
     /**
+     * @public
+     * @api
      * Xóa sạch tiến trình màn chơi đã lưu.
      * Tác dụng: Đặt lại trạng thái ban đầu khi người chơi bắt đầu game mới từ Level 1.
      *
      * @returns {void}
      */
+    // noinspection JSUnusedGlobalSymbols
     clearProgress() {
         this._removeItem(StorageService.KEYS.CURRENT_LEVEL);
     }
@@ -176,11 +179,14 @@ export class StorageService {
     // ==========================================
 
     /**
+     * @public
+     * @api
      * Lấy trạng thái bật/tắt âm thanh đã lưu. Mặc định là bật (true) nếu chưa từng thiết lập.
      * Tác dụng: Áp dụng trạng thái âm lượng ngay khi khởi động trò chơi.
      *
      * @returns {boolean} True nếu âm thanh được bật, False nếu bị tắt.
      */
+    // noinspection JSUnusedGlobalSymbols
     getSoundEnabled() {
         const val = this._getItem(StorageService.KEYS.SOUND_ENABLED);
         if (val === null || val === undefined) {
@@ -190,12 +196,15 @@ export class StorageService {
     }
 
     /**
+     * @public
+     * @api
      * Lưu trạng thái bật hoặc tắt âm thanh của người chơi.
      * Tác dụng: Duy trì cài đặt âm thanh xuyên suốt các phiên chơi tiếp theo.
      *
      * @param {boolean} enabled - Trạng thái bật/tắt mới.
      * @returns {void}
      */
+    // noinspection JSUnusedGlobalSymbols
     saveSoundEnabled(enabled) {
         this._setItem(StorageService.KEYS.SOUND_ENABLED, enabled ? "1" : "0");
     }
@@ -205,23 +214,29 @@ export class StorageService {
     // ==========================================
 
     /**
+     * @public
+     * @api
      * Lấy tên chủ đề giao diện (theme) đã chọn.
      * Tác dụng: Tải bộ texture đồ họa tương ứng khi khởi tạo ứng dụng.
      *
      * @param {string} [defaultTheme="original"] - Chủ đề mặc định nếu chưa lưu.
      * @returns {string} Tên định danh của chủ đề.
      */
+    // noinspection JSUnusedGlobalSymbols
     getTheme(defaultTheme = "original") {
         return this._getItem(StorageService.KEYS.THEME) || defaultTheme;
     }
 
     /**
+     * @public
+     * @api
      * Lưu chủ đề giao diện mới mà người chơi vừa chọn.
      * Tác dụng: Ghi nhớ chủ đề để áp dụng tự động trong các phiên chơi sau.
      *
      * @param {string} themeName - Tên chủ đề cần lưu.
      * @returns {void}
      */
+    // noinspection JSUnusedGlobalSymbols
     saveTheme(themeName) {
         if (themeName) {
             this._setItem(StorageService.KEYS.THEME, themeName);
@@ -229,6 +244,8 @@ export class StorageService {
     }
 
     /**
+     * @public
+     * @api
      * Lưu thời gian kỷ lục nhanh nhất hoàn thành một màn chơi (tính bằng mili-giây).
      * Tác dụng: Hỗ trợ tính năng speedrun và bảng thành tích cá nhân.
      *
@@ -236,9 +253,10 @@ export class StorageService {
      * @param {number} timeMs - Thời gian hoàn thành (mili-giây).
      * @returns {void}
      */
+    // noinspection JSUnusedGlobalSymbols
     saveBestTimeForStage(level, timeMs) {
         const raw = this._getItem(StorageService.KEYS.BEST_TIMES);
-        let times = {};
+        let times;
         try {
             times = raw ? JSON.parse(raw) : {};
         } catch {
@@ -253,12 +271,15 @@ export class StorageService {
     }
 
     /**
+     * @public
+     * @api
      * Truy xuất thời gian kỷ lục của một màn chơi cụ thể.
      * Tác dụng: Hiển thị thời gian kỷ lục trên bảng điểm hoặc menu tạm dừng.
      *
      * @param {number} level - Số thứ tự màn chơi.
      * @returns {number|null} Thời gian hoàn thành tốt nhất (ms) hoặc null nếu chưa có dữ liệu.
      */
+    // noinspection JSUnusedGlobalSymbols
     getBestTimeForStage(level) {
         const raw = this._getItem(StorageService.KEYS.BEST_TIMES);
         if (!raw) return null;

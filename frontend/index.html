@@ -66,6 +66,7 @@
 		})();
 
 		var canvas, stage, exportRoot;
+		// noinspection JSUnusedGlobalSymbols
 		window.stage = window.stage || {
 			touchMode: false,
 			doneIntro: false,
@@ -136,7 +137,7 @@
 				}
 			}
 		}
-		if (window.navigator.userAgent.indexOf("Safari") >= 0 && "ontouchstart" in window && window.navigator.userAgent.indexOf("iPhone") == -1) {
+		if (window.navigator.userAgent.indexOf("Safari") >= 0 && "ontouchstart" in window) {
 			var userAgent = "Mozilla/5.0 (iPad; CPU OS 13_1_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.1 Mobile/15E148 Safari/604.1";
 			setUserAgent(window, userAgent);
 		}
@@ -149,7 +150,7 @@
 <body>
 <div id="screen-split">
 	<div id="side_panel">
-		<select id="image_select" onchange="change_image()">
+		<select id="image_select" aria-label="Theme" onchange="change_image()">
 			<option value="">Select Theme</option>
 			<option value="original">Original</option>
 			<option value="gray">Gray</option>
@@ -196,9 +197,7 @@
 					<div class="solver-field" id="heuristic_container">
 						<label for="heuristic_select">Hàm Heuristic:</label>
 						<select id="heuristic_select">
-							<option value="manhattan_div2">Manhattan / 2</option>
-							<option value="orientation_aware">Orientation Aware</option>
-							<option value="relaxed_point">Relaxed Point</option>
+							<option value="orientation_aware_manhattan">Orientation-Aware Manhattan</option>
 						</select>
 					</div>
 					<div class="solver-buttons">

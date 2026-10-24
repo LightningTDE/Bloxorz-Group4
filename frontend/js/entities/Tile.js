@@ -197,11 +197,14 @@ export class Tile {
     }
 
     /**
+     * @public
+     * @api
      * Kiểm tra xem ô sàn có phải là một công tắc điều khiển cầu hay không.
      * Tác dụng: Nhận diện các ô công tắc tròn nhẹ ('s') và công tắc chữ X nặng ('h').
      *
      * @returns {boolean} True nếu là công tắc.
      */
+    // noinspection JSUnusedGlobalSymbols
     isSwitch() {
         return this.type === TILE_TYPES.SOFT_SWITCH || this.type === TILE_TYPES.HEAVY_SWITCH;
     }

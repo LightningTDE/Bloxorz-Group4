@@ -567,11 +567,14 @@ export class AtlasMetadata {
     ];
 
     /**
+     * @public
+     * @api
      * Khởi tạo và trả về một đối tượng createjs.SpriteSheet từ phần tử hình ảnh atlas đã nạp.
      *
      * @param {HTMLImageElement|HTMLCanvasElement} imageElement - Ảnh texture atlas đã tải xong vào bộ nhớ.
      * @returns {createjs.SpriteSheet} Instance SpriteSheet sẵn sàng gắn cho các MovieClip/Sprite.
      */
+    // noinspection JSUnusedGlobalSymbols
     static createSpriteSheet(imageElement) {
         return new createjs.SpriteSheet({
             images: [imageElement],
@@ -580,10 +583,13 @@ export class AtlasMetadata {
     }
 
     /**
+     * @public
+     * @api
      * Lấy đối tượng cấu hình metadata chứa tên atlas và danh sách khung hình.
      *
      * @returns {{ name: string, frames: Array<[number, number, number, number]> }} Metadata của atlas.
      */
+    // noinspection JSUnusedGlobalSymbols
     static getMetadata() {
         return {
             name: ATLAS_ID,
