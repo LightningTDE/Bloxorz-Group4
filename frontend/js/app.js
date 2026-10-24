@@ -358,7 +358,7 @@ class App {
         if (btnSolve) {
             btnSolve.addEventListener("click", async () => {
                 const algo = algoSelect ? algoSelect.value : "A*";
-                const heur = heuristicSelect ? heuristicSelect.value : "manhattan_div2";
+                const heur = heuristicSelect ? heuristicSelect.value : "orientation_aware_manhattan";
                 await solver.startSolve({ algorithm: algo, heuristic: heur });
             });
         }

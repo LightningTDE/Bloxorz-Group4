@@ -6,20 +6,14 @@ from app.core.level_loader import level_loader
 from app.core.engine import BloxorzEngine
 from app.core.models import BloxorzState, NAME_TO_POS, STANDING
 from app.pathfinder.factory import SolverFactory
-from app.pathfinder.astar.heuristics import (
-    ManhattanDiv2Heuristic,
-    OrientationAwareHeuristic,
-    RelaxedPointHeuristic
-)
+from app.pathfinder.astar.heuristics import OrientationAwareManhattanHeuristic
 from app.utils.logger import setup_logger
 
 logger = setup_logger("api.solver")
 router = APIRouter()
 
 HEURISTIC_MAP = {
-    "manhattan_div2": ManhattanDiv2Heuristic,
-    "orientation_aware": OrientationAwareHeuristic,
-    "relaxed_point": RelaxedPointHeuristic
+    "orientation_aware_manhattan": OrientationAwareManhattanHeuristic,
 }
 
 def _build_start_state(
@@ -90,7 +84,7 @@ async def solve_level(request: SolveRequestSchema):
     # 3. Chuẩn bị tham số khởi tạo solver
     kwargs = {"measure_memory": True}
     if request.algorithm.upper() in ("A*", "ASTAR"):
-        h_cls = HEURISTIC_MAP.get(request.heuristic, ManhattanDiv2Heuristic)
+        h_cls = HEURISTIC_MAP.get(request.heuristic, OrientationAwareManhattanHeuristic)
         kwargs["heuristic"] = h_cls()
 
     # 4. Khởi tạo thuật toán qua Factory và tiến hành tìm kiếm
@@ -155,7 +149,7 @@ async def get_hint(request: HintRequestSchema):
     start_state = _build_start_state(engine, request.current_state)
 
     # Dùng A* với Manhattan Heuristic để tìm bước đi nhanh nhất
-    solver = SolverFactory.create("A*", heuristic=ManhattanDiv2Heuristic(), measure_memory=False)
+    solver = SolverFactory.create("A*", heuristic=OrientationAwareManhattanHeuristic(), measure_memory=False)
     result = solver.solve(engine, start_state=start_state, timeout_sec=15.0)
 
     if result.is_solved and result.actions:

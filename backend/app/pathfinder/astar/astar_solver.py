@@ -1,12 +1,10 @@
 import heapq
 import time
 from itertools import count
-from typing import Optional, Tuple, Set
 from app.pathfinder.base import BaseSolver, SearchOutcome
-from app.pathfinder.astar.heuristics import BaseHeuristic, ManhattanDiv2Heuristic, HeuristicFactory
+from app.pathfinder.astar.heuristics import BaseHeuristic, OrientationAwareManhattanHeuristic, HeuristicFactory
 from app.core.interfaces import IGameEngine
 from app.core.models import BloxorzState
-
 
 class AStarSolver(BaseSolver):
     """Thuật toán tìm kiếm A* (A-Star Search với Heuristic).
@@ -29,25 +27,25 @@ class AStarSolver(BaseSolver):
 
     def __init__(
         self,
-        heuristic: Optional[BaseHeuristic] = None,
+        heuristic: BaseHeuristic | None = None,
         measure_memory: bool = True
     ):
         super().__init__(measure_memory=measure_memory)
         if isinstance(heuristic, str):
             self.heuristic = HeuristicFactory.create(heuristic)
         else:
-            self.heuristic = heuristic or ManhattanDiv2Heuristic()
+            self.heuristic = heuristic or OrientationAwareManhattanHeuristic()
 
+    @staticmethod
     def _get_effects(
-        self,
         cur_state: BloxorzState,
         next_state: BloxorzState,
         engine: IGameEngine
-    ) -> Set[str]:
+    ) -> set[str]:
         """Kiểm tra nước đi có dẫn đến hậu quả nguy hiểm không (đóng cầu hoặc chạm ô dễ vỡ).
         Đồng bộ với hàm chi phí của UCSSolver.
         """
-        effects: Set[str] = set()
+        effects: set[str] = set()
 
         for cur, nxt in zip(cur_state.doors_state, next_state.doors_state):
             if (cur == True) and (nxt == False):
@@ -85,7 +83,8 @@ class AStarSolver(BaseSolver):
                 cost += penalty[effect]
             return cost
 
-    def _get_goal_coord(self, engine: IGameEngine) -> Tuple[int, int]:
+    @staticmethod
+    def _get_goal_coord(engine: IGameEngine) -> tuple[int, int]:
         """Lấy tọa độ ô đích (gx, gy) từ engine."""
         # 1. Thử lấy từ các thuộc tính hoặc phương thức phổ biến của BloxorzEngine
         for attr in ("goal_coord", "goal_pos", "end_pos", "goal", "end_coord"):
@@ -93,7 +92,7 @@ class AStarSolver(BaseSolver):
             if callable(val):
                 val = val()
             if isinstance(val, (tuple, list)) and len(val) == 2:
-                return (int(val[0]), int(val[1]))
+                return int(val[0]), int(val[1])
 
         # 2. Tìm ký tự 'e' trực tiếp trên lưới grid của engine
         grid = getattr(engine, "grid", None)
@@ -105,9 +104,9 @@ class AStarSolver(BaseSolver):
             for y, row in enumerate(grid):
                 for x, ch in enumerate(row):
                     if ch == 'e':
-                        return (x, y)
+                        return x, y
 
-        return (0, 0)
+        return 0, 0
 
     def _search(
         self,

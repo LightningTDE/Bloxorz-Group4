@@ -1,17 +1,14 @@
 from abc import ABC, abstractmethod
-from typing import Tuple, Dict, Type
 from app.core.interfaces import IHeuristic
 from app.core.models import BloxorzState, STANDING
-
 
 class BaseHeuristic(IHeuristic, ABC):
     """Lớp trừu tượng cơ sở cho hàm Heuristic ước lượng khoảng cách tới đích."""
     name: str = "BaseHeuristic"
 
     @abstractmethod
-    def calculate(self, state: BloxorzState, goal_coord: Tuple[int, int]) -> float:
+    def calculate(self, state: BloxorzState, goal_coord: tuple[int, int]) -> float:
         pass
-
 
 class BloxorzHeuristic(BaseHeuristic):
     """Hàm Heuristic tối ưu cho Bloxorz: Kết hợp Manhattan/2 và Phạt tư thế (Orientation-aware).
@@ -27,7 +24,7 @@ class BloxorzHeuristic(BaseHeuristic):
     """
     name: str = "orientation_aware_manhattan"
 
-    def calculate(self, state: BloxorzState, goal_coord: Tuple[int, int]) -> float:
+    def calculate(self, state: BloxorzState, goal_coord: tuple[int, int]) -> float:
         gx, gy = goal_coord
         cells = state.get_occupied_cells()
         if not cells:
@@ -49,21 +46,14 @@ class BloxorzHeuristic(BaseHeuristic):
             return 1.0
         return (min_dist / 2.0) + 0.5
 
-
-ManhattanDiv2Heuristic = BloxorzHeuristic
-OrientationAwareHeuristic = BloxorzHeuristic
-RelaxedPointHeuristic = BloxorzHeuristic
-
+OrientationAwareManhattanHeuristic = BloxorzHeuristic
 
 class HeuristicFactory:
-    _registry: Dict[str, Type[BaseHeuristic]] = {
+    _registry: dict[str, type[BaseHeuristic]] = {
         "default": BloxorzHeuristic,
-        "manhattan": BloxorzHeuristic,
-        "manhattan_div2": BloxorzHeuristic,
-        "orientation_aware": BloxorzHeuristic,
-        "relaxed_point": BloxorzHeuristic,
+        "orientation_aware_manhattan": BloxorzHeuristic
     }
 
     @classmethod
-    def create(cls, name: str = "default") -> BaseHeuristic:
+    def create(cls, _name: str = "default") -> BaseHeuristic:
         return BloxorzHeuristic()
