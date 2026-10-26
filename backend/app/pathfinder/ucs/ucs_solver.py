@@ -48,8 +48,8 @@ class UCSSolver(BaseSolver):
         """
 
         penalty = {
-            "bridge_off" : 2,
-            "fragile" : 2
+            "bridge_off" : 20,
+            "fragile" : 20
         }
 
         effects = self._get_effects(cur_state, next_state, engine)
