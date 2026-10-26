@@ -1,5 +1,6 @@
 import time
 
+from app.core.error_handler import BloxorzError
 from app.core.interfaces import IGameEngine
 from app.core.models import BloxorzState
 from app.pathfinder.base import BaseSolver, SearchOutcome
@@ -19,7 +20,7 @@ class IDSSolver(BaseSolver):
     def __init__(self, max_depth: int = 100, measure_memory: bool = True):
         """Configure the maximum depth and the optional peak-memory measurement."""
         if not isinstance(max_depth, int) or isinstance(max_depth, bool) or max_depth <= 0:
-            raise ValueError("max_depth must be a positive integer.")
+            raise BloxorzError("max_depth must be a positive integer.")
         super().__init__(measure_memory=measure_memory)
         self.max_depth = max_depth
 
