@@ -5,7 +5,7 @@ from app.core.engine import BloxorzEngine
 from app.core.error_handler import BloxorzError
 from app.core.interfaces import IGameEngine
 from app.core.level_loader import level_loader
-from app.core.models import BloxorzState
+from app.core.models import BloxorzState, HORIZONTAL_X
 from app.pathfinder.bfs.bfs_solver import BFSSolver
 from app.pathfinder.ids.ids_solver import IDSSolver
 
@@ -140,6 +140,25 @@ class IDSSolverTests(unittest.TestCase):
         self.assertTrue(result.is_solved)
         self.assertTrue(any(state.is_split for state in result.states_path))
         self.assertTrue(engine.is_goal(result.states_path[-1]))
+
+    def test_level_fifteen_unsolvable_island_stops_after_exhaustion(self) -> None:
+        engine = BloxorzEngine(level_loader.load_level(15))
+        trapped_state = BloxorzState(
+            pos_type=HORIZONTAL_X,
+            x=12,
+            y=1,
+            doors_state=engine.initial_doors_state,
+        )
+
+        result = IDSSolver(max_depth=100, measure_memory=False).solve(
+            engine,
+            start_state=trapped_state,
+            timeout_sec=5,
+        )
+
+        self.assertFalse(result.is_solved)
+        self.assertFalse(result.timed_out)
+        self.assertLess(result.expanded_nodes, 1000)
 
     def test_non_positive_max_depth_is_rejected(self) -> None:
         for max_depth in (0, -1):

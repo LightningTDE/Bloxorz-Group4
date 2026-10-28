@@ -1,9 +1,17 @@
 import time
+from enum import Enum, auto
 
 from app.core.error_handler import BloxorzError
 from app.core.interfaces import IGameEngine
 from app.core.models import BloxorzState
 from app.pathfinder.base import BaseSolver, SearchOutcome
+
+
+class _DLSStatus(Enum):
+    FOUND = auto()
+    CUTOFF = auto()
+    FAILURE = auto()
+    TIMEOUT = auto()
 
 
 class IDSSolver(BaseSolver):
@@ -40,8 +48,11 @@ class IDSSolver(BaseSolver):
         actions: list[str] = []
         states: list[BloxorzState] = [start_state]
         found_cost = 0.0
-        # A state known to fail with k moves remaining also fails for <= k moves.
+        # A state known to have no solution within k moves also has none for <= k.
         failed_remaining: dict[BloxorzState, int] = {}
+        # States in this set were explored without any depth cutoff. They are
+        # proven dead ends, so later IDS iterations do not need to revisit them.
+        exhausted: set[BloxorzState] = set()
 
         def outcome(solved: bool, _timed_out: bool = False) -> SearchOutcome:
             return SearchOutcome(
@@ -60,42 +71,43 @@ class IDSSolver(BaseSolver):
 
             # IMPORTANT: reset at every limit; otherwise IDS loses completeness.
             best_depth: dict[BloxorzState, int] = {start_state: 0}
-            cutoff = False
-            timed_out = False
             actions.clear()
             states[:] = [start_state]
 
-            def dls(state: BloxorzState, depth: int, path_cost: float) -> bool:
-                """Depth-first search with a depth bound for one IDS iteration."""
+            def dls(
+                state: BloxorzState,
+                depth: int,
+                path_cost: float,
+            ) -> _DLSStatus:
+                """Return found, cutoff, failure, or timeout for one DLS call."""
                 nonlocal expanded_nodes, generated_nodes
-                nonlocal cutoff, timed_out, found_cost
+                nonlocal found_cost
 
                 # Check frequently enough even for large, cyclic state spaces.
                 if expanded_nodes % 256 == 0 and time.perf_counter() >= deadline:
-                    timed_out = True
-                    return False
+                    return _DLSStatus.TIMEOUT
 
                 if engine.is_goal(state):
                     found_cost = path_cost
-                    return True
+                    return _DLSStatus.FOUND
+
+                if state in exhausted:
+                    return _DLSStatus.FAILURE
 
                 remaining = depth_limit - depth
                 if depth == depth_limit:
-                    cutoff = True
                     failed_remaining[state] = max(failed_remaining.get(state, -1), 0)
-                    return False
+                    return _DLSStatus.CUTOFF
 
                 if failed_remaining.get(state, -1) >= remaining:
-                    cutoff = True
-                    return False
+                    return _DLSStatus.CUTOFF
 
                 expanded_nodes += 1
                 successors = engine.get_successors(state)
                 generated_nodes += len(successors)
+                saw_cutoff = False
 
                 for action, next_state, step_cost in successors:
-                    if timed_out:
-                        return False
                     next_depth = depth + 1
                     previous_depth = best_depth.get(next_state)
                     if previous_depth is not None and previous_depth <= next_depth:
@@ -105,21 +117,31 @@ class IDSSolver(BaseSolver):
                     actions.append(action)
                     states.append(next_state)
 
-                    if dls(next_state, next_depth, path_cost + step_cost):
-                        return True
+                    status = dls(next_state, next_depth, path_cost + step_cost)
+                    if status is _DLSStatus.FOUND:
+                        return _DLSStatus.FOUND
 
                     actions.pop()
                     states.pop()
 
-                if not timed_out:
-                    failed_remaining[state] = max(failed_remaining.get(state, -1), remaining)
-                return False
+                    if status is _DLSStatus.TIMEOUT:
+                        return _DLSStatus.TIMEOUT
+                    if status is _DLSStatus.CUTOFF:
+                        saw_cutoff = True
 
-            if dls(start_state, 0, 0.0):
+                if saw_cutoff:
+                    failed_remaining[state] = max(failed_remaining.get(state, -1), remaining)
+                    return _DLSStatus.CUTOFF
+
+                exhausted.add(state)
+                return _DLSStatus.FAILURE
+
+            status = dls(start_state, 0, 0.0)
+            if status is _DLSStatus.FOUND:
                 return outcome(solved=True)
-            if timed_out:
+            if status is _DLSStatus.TIMEOUT:
                 return outcome(solved=False, _timed_out=True)
-            if not cutoff:
+            if status is _DLSStatus.FAILURE:
                 # The reachable state space was exhausted before the bound.
                 return outcome(solved=False)
 
