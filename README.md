@@ -1,120 +1,125 @@
-## 🧊 Bloxorz Solver — Group 4 (25TNT1)
+<h1 style="text-align:center;">Bloxorz Reimagined</h1>
 
-## Cài đặt & chạy
-Sẽ được cập nhật sau
+<p style="text-align:center;">
+  <strong>Phiên bản làm lại của Flash Bloxorz với Python 3 & JS</strong>
+</p>
 
-## Đọc trước khi code (bắt buộc)
-| File                                                                                                            | Nội dung                                                                                                                                                                                   |
-|-----------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| [`CONTRIBUTING.md`](CONTRIBUTING.md)                                                                            | **Quy định làm việc nhóm**: Các quy tắc không được vi phạm, quy trình một việc, nhánh/commit/PR, review, quy định về Hoàn thành, họp và báo tiến độ, AI và liêm chính học thuật, chốt code |
-| [`docs/GIT_GUIDE.md`](docs/GIT_GUIDE.md)                                                                        | Hướng dẫn Git/GitHub từng bước, xử lý conflict, các tình huống hay gặp                                                                                                                     |
-| [`docs/CODING_RULES.md`](docs/CODING_RULES.md)                                                                  | Quy ước viết code, kiến trúc (ai được gọi ai), quy ước riêng cho game/solver/GUI/test                                                                                                      |
-| [`docs/REVIEW_GUIDE.md`](docs/REVIEW_GUIDE.md)                                                                  | Cách review, checklist theo từng loại việc, cách viết nhận xét                                                                                                                             |
-| [`docs/AI_USAGE.md`](docs/AI_USAGE.md)                                                                          | Nhật ký dùng AI (phụ lục báo cáo)                                                                                                                                                          |
-| [`docs/REFERENCES.md`](docs/REFERENCES.md)                                                                      | Tài liệu tham khảo (phần tài liệu trong báo cáo)                                                                                                                                           |
-| [`Nhóm 4 - AI Project 1`](https://docs.google.com/spreadsheets/d/1B5uX3Nvys1YfntljhImf00eAExu-6hVospdjl5bBNCM/) | Danh sách việc, lịch, quá trình, người làm, **người review**, trạng thái                                                                                                                   |
+<p style="text-align:center;">
+  <img alt="python" src="https://img.shields.io/badge/Python-3.14%2B-ff3f3f?logo=python&labelColor=1e1e1e" />
+  <img alt="node-js" src="https://img.shields.io/badge/Node.js-6DA55F?logo=node.js&logoColor=white" />
+  <img alt="fastapi" src="https://img.shields.io/badge/FastAPI-009485.svg?logo=fastapi&logoColor=white" />
+  <img alt="uv" src="https://img.shields.io/badge/uv-261230.svg?logo=uv&logoColor=#de5fe9" />
+  <img alt="powershell" src="https://custom-icon-badges.demolab.com/badge/PowerShell-5391FE?logo=powershell-white&logoColor=fff" />
+</p>
 
-Mẫu Pull Request nằm ở `.github/pull_request_template.md`; CI chạy unit test tự động (`.github/workflows/tests.yml`).
-Repo GitHub nên có **gốc là thư mục `backend`** (với `Python`) và thư mục `frontend` (với `NodeJS`) để CI chạy đúng.
+---
 
-## Cấu trúc thư mục
-```
-Bloxorz-Group4/
-├── frontend/ 
-├── resources/levels/            # Chứa 33 file màn chơi
-└── backend/                        
-    ├── app/
-    │   ├── __init__.py
-    │   ├── core/                    # Module 1: enums.py, exceptions.py, models.py, interfaces.py
-    │   ├── engine/                  # Module 2: level_loader.py, bloxorz_engine.py
-    │   └── pathsolver/              # Module 3: base.py, bfs/ids/ucs/astar_solver.py, factory.py, benchmark.py
-    └── main.py
-```
+## 📖 Giới thiệu
 
-## Quy định giữa các module
-```
-1. Tọa độ: Coord(x, y) với x là cột (0–14), y là dòng (0–9, dòng 0 ở trên cùng). Truy cập lưới bằng grid[y][x]. Các hướng di chuyển: UP: y−1, DOWN: y+1, LEFT: x−1, RIGHT: x+1.
-2. Import một chiều: core không import module nào. engine và pathsolver chỉ import core. main.py import cả ba. tests/ được import mọi module.
-3. Import path: Luôn dùng đường dẫn đầy đủ từ app, ví dụ: from app.core.models import BlockState. Chạy từ thư mục backend/, file pytest.ini đặt pythonpath = ....
-4. Stateless: Engine và solver không giữ trạng thái giữa các lần gọi. Phương thức apply_action không sửa đổi state đầu vào.
-5. Kiểm tra goal khi pop: Mọi solver kiểm tra goal khi lấy node ra khỏi hàng đợi, không kiểm tra lúc mới sinh node, để chỉ số expanded_nodes so sánh được công bằng giữa các thuật toán.
-```
+* **Dự án:** Bloxorz Reimagined (Mã dự án: `Bloxorz-Group4`)
+* **Môn học:** Cơ sở Trí tuệ Nhân tạo (CSAI)
+* **Nhóm thực hiện:** Nhóm 4 - 25TNT1
 
+Dự án hiện đại hóa trò chơi Flash kinh điển **Bloxorz** và kế thừa từ dự án `bloxorz-cybernate` 
+bằng kiến trúc Web (ES6) kết hợp Python FastAPI sau khi nền tảng Adobe Flash Player bị khai tử,
+được tích hợp các thuật toán tìm đường đi (BFS, IDS, UCS, A*) và tái cấu trúc hệ thống.
 
-## Định dạng màn chơi (`resources/levels/*.json`)
-### 1. Cấu trúc JSON
-```json
-{
-  "level": 23,
-  "code": "293486",
-  "start": [4, 7],
-  "grid": [
-    " bbb        bbb",
-    " bhb        bsb",
-    " bbb   bbbkqbbb",
-    "rbbbl  beb  bbs",
-    "b   b  bbb    b",
-    "s   b  fff    b",
-    "blrbbbfffffbbbk",
-    "   bbbfffffbvb ",
-    "   bbbfffffbbb ",
-    "   bbbbbl      "
-  ],
-  "swatches": {
-    "swatch143": [[14, 6, "off"], [10, 2, "off"], [11, 2, "off"]],
-    "swatch131": [[8, 9, "onoff"], [1, 6, "on"], [2, 6, "on"]],
-    "swatch05": [[0, 3, "on"], [1, 6, "off"], [2, 6, "off"]],
-    "swatch21": [[4, 3, "on"]]
-  },
-  "splits": {
-    "swatch127": [12, 7, 2, 2]
-  }
-}
-```
+---
 
-### 2. Quy ước các kí tự grid
-|     Ký tự      | Tên loại ô                        | Mô tả & Quy tắc vật lý                                                                                                                                                    |
-|:--------------:|-----------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `' '` *(cách)* | Vực thẳm (Empty)                  | Khoảng không ngoài rìa bản đồ. Bất kỳ phần nào của khối đá rơi vào đây đều tính là **Thua (Fall)**.                                                                       |
-|     `'b'`      | Sàn thường (Normal)               | Sàn bê tông tiêu chuẩn, chịu được toàn bộ trọng lượng khối đá ở mọi tư thế (đứng, nằm) và mọi kích thước.                                                                 |
-|     `'e'`      | Hố đích (End Goal)                | Lỗ vuông đích đến. Bắt buộc khối đá phải **dựng đứng 100%** vào ô này mới lọt xuống hố → **Thắng (Win)**. Nếu nằm đè ngang qua chỉ tính như sàn thường.                   |
-|     `'s'`      | Công tắc mềm (Soft Switch)        | Biểu tượng nút tròn. Bất kỳ va chạm nào (đứng thẳng, nằm đè 1 nửa, hoặc khối nhỏ 1×1) đều kích hoạt được công tắc.                                                        |
-|     `'h'`      | Công tắc cứng (Heavy Switch)      | Biểu tượng dấu chữ thập (X). Chỉ kích hoạt khi khối đá lớn **dựng đứng 100%** trọng lượng lên ô này. Nằm đè qua hoặc khối nhỏ 1×1 dẫm lên đều không kích hoạt.            |
-|     `'v'`      | Công tắc phân tách (Split Switch) | Biểu tượng hai vòng tròn lồng nhau. Chỉ kích hoạt khi khối đá lớn **dựng đứng** lên ô này. Khối 1×2 sẽ tách thành 2 khối nhỏ 1×1 tại vị trí chỉ định trong `"splits"`.    |
-|     `'f'`      | Sàn nứt (Fragile Tile)            | Ô gạch cam giòn. Chỉ chịu được khi khối đá nằm ngang (trọng lượng phân bổ trên 2 ô) hoặc khối nhỏ 1×1. Nếu khối đá lớn dựng đứng lên ô này, sàn vỡ vụn → **Thua (Fall)**. |
-|  `'l'`, `'k'`  | Cầu trái (Bridge Left)            | Cầu mở gập từ trái sang. `'l'`: Ban đầu **ĐÓNG** (chưa có sàn, đi vào sẽ rớt); `'k'`: Ban đầu **MỞ** (đã có sàn sẵn, đi qua được).                                        |
-|  `'r'`, `'q'`  | Cầu phải (Bridge Right)           | Cầu mở gập từ phải sang. `'r'`: Ban đầu **ĐÓNG** (chưa có sàn, đi vào sẽ rớt); `'q'`: Ban đầu **MỞ** (đã có sàn sẵn, đi qua được).                                        |
+## Phần 1: Hướng dẫn cài đặt
 
-#### 3. Quy ước các trường dữ liệu
-1. **`level`** *(int)*: Số thứ tự màn chơi (từ 1 đến 33).
-2. **`code`** *(string)*: Mật mã (Passcode) 6 chữ số của màn chơi, cho phép người chơi nhập ở menu để chơi ngay màn này.
-3. **`start`** *([int, int])*: Tọa độ xuất phát `[x, y]` của khối đá. Khi bắt đầu màn chơi, khối đá luôn ở tư thế đứng thẳng (`up` / `STANDING`) tại vị trí này.
-4. **`grid`** *(List[string])*: Mảng gồm đúng 10 chuỗi, mỗi chuỗi có độ dài 15 ký tự. Mỗi ký tự tại vị trí `grid[y][x]` xác định loại ô gạch tại tọa độ `(x, y)`.
-5. **`swatches`** *(object)*: Bảng tra cứu các công tắc điều khiển cầu nối (đóng/mở cầu):
-    - **Quy tắc đặt tên Key**: `"swatch" + x + y`. Chữ số cuối cùng luôn là tọa độ $y \in [0, 9]$, phần chữ số đứng trước là tọa độ $x$ (ví dụ: `"swatch143"` là công tắc tại $x=14, y=3$; `"swatch05"` là công tắc tại $x=0, y=5$).
-    - **Cấu trúc mảng hành động**: Giá trị của mỗi key là một danh sách các ô cầu bị tác động `[[door_x, door_y, action_type], ...]`.
-    - **`action_type`**:
-        - `"onoff"`: Đảo trạng thái (Toggle - nếu cầu đang mở thì đóng lại, nếu đang đóng thì mở ra).
-        - `"on"`: Luôn luôn Bật/Mở cầu (trở thành sàn passable).
-        - `"off"`: Luôn luôn Tắt/Đóng cầu (mất sàn, trở thành khoảng không).
-6. **`splits`** *(object)*: Bảng tra cứu công tắc phân tách khối đá thành 2 khối nhỏ 1×1:
-    - **Quy tắc đặt tên Key**: `"swatch" + x + y` tương ứng với tọa độ của ô công tắc `'v'` (ví dụ: `"swatch127"` tương ứng ô `'v'` tại $x=12, y=7$).
-    - **Giá trị**: Mảng 4 phần tử `[b1_x, b1_y, b2_x, b2_y]` quy định tọa độ xuất hiện của 2 khối nhỏ:
-        - Khối nhỏ 1 xuất hiện tại $(x=12, y=7)$.
-        - Khối nhỏ 2 xuất hiện tại $(x=2, y=2)$.
+### 1. Yêu cầu hệ thống
+- **Hệ điều hành**: Windows 10/11, macOS hoặc Linux.
+- **Python**: Phiên bản $\ge$ 3.14 (Khuyên dùng môi trường `uv`)
+- **Node.js**: Phiên bản $\ge$ 24.21.0
 
-## Quy ước Git (tóm tắt, đầy đủ ở CONTRIBUTING.md và docs/GIT_GUIDE.md)
-- `main` chỉ chứa code chạy được, **không push thẳng**. Mỗi việc một nhánh: `feature/<tên>-<ID>`
-  (ví dụ `feature/an-A3`), xong thì mở Pull Request, **nhờ 1 người khác xem** rồi mới merge.
-- Commit message: `[A3] Add orientation transition table`.
-- Mỗi việc có **người review** riêng (xem Excel); không tự merge khi chưa được Approve; review trong 24 giờ.
-- Mỗi người chỉ sửa file thuộc module của mình. Muốn đổi module khác thì báo cả nhóm trước.
-```bash
-git checkout main && git pull
-git checkout -b feature/an-A3
-# ... code ...
-git add <file> && git commit -m "[A3] Add orientation transition table"
-git push -u origin feature/an-A3     # rồi mở Pull Request trên GitHub
-```
+### 2. Cài đặt tự động
 
+#### Trên hệ điều hành Windows:
+Thực hiện **một trong hai cách**:
+- **Cách A**: Nhấp đúp chuột trực tiếp vào file [`start.bat`](start.bat).
+- **Cách B**: Mở PowerShell tại thư mục dự án và gõ lệnh:
+  ```powershell
+  .\start.ps1
+  ```
   
+#### Trên hệ điều hành Linux / Ubuntu / macOS:
+Mở Terminal tại thư mục dự án và chạy:
+```bash
+chmod +x start.sh && ./start.sh
+```
+
+> [!TIP]
+> **Kịch bản tự động (`start.ps1` trên Windows hoặc `start.sh` trên Linux/macOS) sẽ thực hiện trọn gói:**
+> 1. Kiểm tra môi trường Node.js ($\ge 24.21.0$) và Python/`uv` ($\ge 3.14$).
+> 2. Tự động đồng bộ / cài đặt các thư viện cần thiết (`fastapi`, `uvicorn`, `pydantic`).
+> 3. Khởi động Backend Python FastAPI tại cổng `8000`.
+> 4. Khởi động Frontend Static Server tại cổng `3000`.
+> 5. Chạy Health Check kiểm tra kết nối và thông báo đường link sẵn sàng.
+> 6. Khi muốn dừng, chỉ cần nhấn tổ hợp phím **`Ctrl + C`**, kịch bản sẽ tự động tắt an toàn cả 2 dịch vụ.
+
+### 3. Cài đặt thủ công
+
+#### Bước 3.1: Cài đặt Thư viện Python
+Chọn một trong hai phương thức:
+- **Dùng công cụ `uv` (Khuyên dùng)**:
+  ```bash
+  uv sync
+  ```
+- **Dùng công cụ `pip` truyền thống**:
+  ```bash
+  pip install -r requirements.txt
+  ```
+  
+#### Bước 3.2: Khởi động Backend Python (Cổng 8000)
+Mở một cửa sổ Terminal mới:
+```bash
+uv run uvicorn main:app --app-dir backend --host 127.0.0.1 --port 8000 --reload
+# Hoặc nếu không dùng uv:
+# python -m uvicorn main:app --app-dir backend --host 127.0.0.1 --port 8000 --reload
+```
+
+#### Bước 3.3: Khởi động Frontend Static Server (Cổng 3000)
+Mở một cửa sổ Terminal thứ hai:
+```bash
+node scripts/server.js
+```
+
+### 4. Địa Chỉ Truy Cập Hệ Thống
+
+| Dịch vụ                         | Địa chỉ URL                                              | Chức năng                                                             |
+|:--------------------------------|:---------------------------------------------------------|:----------------------------------------------------------------------|
+| **Trò chơi Web (Frontend)**     | [http://localhost:3000](http://localhost:3000)           | Giao diện chơi game tương tác và bảng điều khiển AI Pathfinder        |
+| **Tài liệu API Swagger**        | [http://localhost:8000/docs](http://localhost:8000/docs) | Tài liệu trực quan thử nghiệm các API `/solve`, `/hint`, `/benchmark` |
+| **Kiểm tra trạng thái Backend** | [http://localhost:8000/](http://localhost:8000/)         | Health check dịch vụ backend (`{"status": "online"}`)                 |
+
+## Phần 2: Hướng dẫn sử dụng
+
+### 1. Luật chơi & Điều khiển bằng tay
+
+- **Di chuyển block**: Sử dụng các phím mũi tên $\uparrow, \downarrow, \leftarrow, \rightarrow$ hoặc các phím `W, A, S, D`.
+- **Đổi khối điều khiển (Split Mode)**: Phím **`Space`** (Phím cách) — Dùng để hoán đổi quyền điều khiển giữa 2 khối nhỏ $1 \times 1$ khi khối lớn bị phân tách.
+- **Tạm dừng / Tiếp tục**: Phím **`P`** hoặc phím `Esc`.
+- **Bật / Tắt âm thanh**: Phím **`M`** (hoặc nhấn nút Toggle Sound trên menu).
+- **Đặt lại trò chơi**: Sử dụng phím **`R`** để reset màn chơi.
+
+### 2. Sử Dụng bộ giải tự động AI Pathfinder
+
+Khung điều khiển màu đen xám nằm ở phía bên trái màn hình:
+
+1. **Lựa chọn Thuật toán**:
+   - `A* (Heuristic)`
+   - `BFS (Chiều rộng)`
+   - `IDS (Sâu dần)`
+   - `UCS (Chi phí đồng nhất)`
+2. **Lựa chọn Hàm Heuristic** *(Khi chọn A\*)*:
+   - `Orientation-Aware Manhattan`
+3. **Các Nút Tác Vụ**:
+   - **`Auto Solve`**: Gửi tọa độ khối hiện tại về máy chủ backend để tìm đường. Sau khi có lời giải, block sẽ tự động lăn từng bước trên trên trò chơi cho đến khi lọt hố đích.
+   - **`Stop`**: Cho phép dừng auto-solve giữa chừng. Bàn phím sẽ được mở khóa lại ngay lập tức để người chơi tự chơi tiếp. Nếu bấm lại Auto Solve sau đó, AI sẽ giải tiếp từ vị trí mới đứng.
+   - **`Gợi ý (Hint)`**: AI tính toán nhanh và hiển thị gợi ý 1 nước đi tiếp theo tối ưu (ví dụ: *"Gợi ý: Lăn TRÁI - Còn ~12 bước"*).
+4. **Bảng Thống Kê Benchmark Hiệu Năng**:
+   - **Thời gian**: Thời gian CPU giải thuật toán tính bằng mili-giây (`ms`).
+   - **Đỉnh RAM**: Lượng bộ nhớ RAM đỉnh điểm tiêu thụ (`KB`) đo bằng `tracemalloc`.
+   - **Đã duyệt**: Tổng số lượt mở rộng trạng thái (`expanded nodes`).
+   - **Số bước**: Tổng số bước di chuyển của đường đi tìm được.

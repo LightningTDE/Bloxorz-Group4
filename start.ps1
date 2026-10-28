@@ -96,7 +96,7 @@ if ($UvCmd) {
 
     if (-not $PythonExe) {
         Write-Err "Khong tim thay ca uv lan Python tren he thong!"
-        Write-Host "       Vui long cai dat uv (https://docs.astral.sh/uv/) hoac Python (>= 3.10)" -ForegroundColor Yellow
+        Write-Host "       Vui long cai dat uv (https://docs.astral.sh/uv/) hoac Python (>= 3.14)" -ForegroundColor Yellow
         exit 1
     }
 

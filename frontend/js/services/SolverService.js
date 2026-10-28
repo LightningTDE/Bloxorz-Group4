@@ -92,7 +92,7 @@ export class SolverService {
             level_number: levelNumber,
             algorithm: algorithm,
             heuristic: heuristic,
-            timeout_sec: 30.0,
+            timeout_sec: 60.0,
             current_state: currentState
         };
 

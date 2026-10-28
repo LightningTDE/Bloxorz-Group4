@@ -84,4 +84,4 @@ class BenchmarkRequestSchema(BaseModel):
     """
     level_numbers: list[int] = Field(default_factory=lambda: [1, 2, 3, 5, 8], description="Danh sách các màn chơi cần đo kiểm")
     algorithms: list[str] = Field(default_factory=lambda: ["BFS", "IDS", "UCS", "A*"], description="Danh sách các thuật toán tham gia")
-    timeout_sec: float = Field(default=30.0, gt=0, le=60.0, description="Thời gian timeout tối đa (giây)")
+    timeout_sec: float = Field(default=60.0, gt=0, le=60.0, description="Thời gian timeout tối đa (giây)")
